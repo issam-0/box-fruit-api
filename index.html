@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Blox Fruits - Ultimate Mod Menu</title>
+    <meta name="description" content="BloxMods Ultimate — the #1 keyless Blox Fruits mod menu. Auto-farm, ESP, Kill Aura and more. Get your free script instantly.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+                radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            /* Prevent body scroll bounce on mobile, we handle scrolling inside */
+            overscroll-behavior: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-modal {
+            background: rgba(10, 15, 30, 0.95); 
+            backdrop-filter: blur(15px);
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        
+        @keyframes pulse-soft {
+            0%, 100% { box-shadow: 0 0 0px rgba(59, 130, 246, 0); }
+            50% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+        }
+
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        
+        .btn-shine {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-shine::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shine 3s infinite;
+        }
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 100%; }
+            100% { left: 100%; }
+        }
+
+        .progress-bar-striped {
+            background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
+            background-size: 1rem 1rem;
+            animation: progress-stripes 1s linear infinite; 
+        }
+        @keyframes progress-stripes {
+            0% { background-position: 1rem 0; }
+            100% { background-position: 0 0; }
+        }
+
+        /* Scrollbar Styling */
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        .custom-scrollbar { scrollbar-width: thin; scrollbar-color: #334155 transparent; }
+        
+        .smooth-scroll { -webkit-overflow-scrolling: touch; scroll-behavior: smooth; }
+
+        /* Chat Bubbles */
+        .ai-message {
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.4), rgba(30, 41, 59, 0.4));
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 12px 12px 12px 0;
+            padding: 10px 14px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            align-self: flex-start;
+            max-width: 85%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .user-message {
+            background: linear-gradient(135deg, rgba(21, 128, 61, 0.4), rgba(20, 83, 45, 0.4));
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px 12px 0 12px;
+            padding: 10px 14px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            color: #fff;
+            align-self: flex-end;
+            max-width: 85%;
+        }
+        
+        /* Typing Animation */
+        .typing-dot { animation: typing 1.4s infinite ease-in-out both; }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        /* =====================================================
+           CONTENT LOCKER STYLES
+           ===================================================== */
+
+        /* Locker overlay */
+        #locker-modal {
+            background: rgba(5, 8, 20, 0.97);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        /* Spinner ring */
+        @keyframes spin-ring {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+        .locker-spinner {
+            width: 44px;
+            height: 44px;
+            border: 3px solid rgba(59, 130, 246, 0.15);
+            border-top-color: #3b82f6;
+            border-right-color: #8b5cf6;
+            border-radius: 50%;
+            animation: spin-ring 0.9s linear infinite;
+            flex-shrink: 0;
+        }
+
+        /* Loading text pulse */
+        @keyframes text-flicker {
+            0%, 100% { opacity: 1; }
+            50%       { opacity: 0.5; }
+        }
+        .loading-text { animation: text-flicker 1.4s ease-in-out infinite; }
+
+        /* Offer card entrance */
+        @keyframes card-in {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .offer-card {
+            animation: card-in 0.35s ease forwards;
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9));
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .offer-card:hover {
+            border-color: rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+        }
+        .offer-card:nth-child(2) { animation-delay: 0.07s; }
+        .offer-card:nth-child(3) { animation-delay: 0.14s; }
+
+        /* CTA button inside offer card */
+        .offer-cta {
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 0.06em;
+            padding: 9px 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: filter 0.2s, transform 0.15s;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+        }
+        .offer-cta:hover  { filter: brightness(1.15); transform: scale(1.03); }
+        .offer-cta:active { transform: scale(0.97); }
+        .offer-cta::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+        }
+        .offer-cta:hover::after { transform: translateX(100%); }
+
+        /* Payout badge */
+        .payout-badge {
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.25);
+            color: #4ade80;
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: 700;
+            padding: 2px 6px;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* Error state */
+        .locker-error-box {
+            background: rgba(239, 68, 68, 0.07);
+            border: 1px solid rgba(239, 68, 68, 0.18);
+            border-radius: 14px;
+            padding: 22px 18px;
+            text-align: center;
+        }
+
+        /* Shield glow */
+        .lock-glow {
+            filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.5));
+        }
+
+        /* Section divider */
+        .dot-divider {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 10px 0;
+        }
+        .dot-divider::before,
+        .dot-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+        }
+    </style>
+</head>
+
+<body class="text-slate-300 h-[100dvh] w-screen overflow-hidden flex items-center justify-center select-none">
+
+    <div class="w-full h-full sm:h-[90vh] sm:max-w-[400px] glass-panel sm:rounded-3xl overflow-hidden shadow-2xl relative flex flex-col border-0 sm:border">
+        
+        <div class="bg-slate-900/80 p-4 flex justify-between items-center text-[10px] font-mono border-b border-white/5 backdrop-blur-md shrink-0 z-20">
+            <div class="flex items-center text-emerald-400 font-bold">
+                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-2 animate-pulse"></span>
+                SYSTEM ONLINE
+            </div>
+            <div class="text-slate-500">v4.5.2-STABLE</div>
+        </div>
+
+        <div class="overflow-y-auto custom-scrollbar flex-grow relative smooth-scroll pb-24">
+            
+            <div class="pt-8 pb-6 px-6">
+                <div class="text-center mb-6">
+                    <div class="inline-block mb-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-bold tracking-widest uppercase">
+                        Updated November 2025
+                    </div>
+                    <h1 class="text-4xl font-black tracking-tighter text-white mb-1 drop-shadow-xl">
+                        BLOX<span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">MODS</span>
+                    </h1>
+                    <p class="text-sm text-slate-400 font-medium">The Ultimate Script Hub</p>
+                </div>
+
+                <div class="bg-gradient-to-br from-slate-800/50 to-slate-900/50 p-5 rounded-2xl border border-white/10 shadow-lg relative overflow-hidden group">
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl group-hover:bg-blue-500/30 transition-all"></div>
+                    
+                    <div class="flex items-center space-x-4 relative z-10">
+                        <img src="https://i.postimg.cc/VvMJY1m9/image.png" class="w-20 h-20 rounded-xl shadow-lg object-cover border border-slate-700 animate-float">
+                        <div class="flex-1">
+                            <h3 class="text-white font-bold text-lg leading-tight mb-1">Mod Menu Keyless</h3>
+                            <div class="flex items-center space-x-2 mb-3">
+                                <span class="text-[10px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded border border-green-500/20">Anti-Ban</span>
+                                <span class="text-[10px] bg-purple-500/20 text-purple-400 px-1.5 py-0.5 rounded border border-purple-500/20">Auto-Farm</span>
+                            </div>
+                            <button id="inject-btn" onclick="openLockerModal()" class="btn-shine w-full bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-2.5 rounded-lg transition-all shadow-lg shadow-blue-900/50 flex items-center justify-center">
+                                <i class="fas fa-download mr-2"></i> INJECT SCRIPT
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 mb-8">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-white font-bold text-sm">Asset Spawner</h3>
+                    <span class="text-[10px] text-slate-500">v2.1 Loaded</span>
+                </div>
+                
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="bg-slate-800/40 rounded-xl p-2 border border-white/5 flex flex-col items-center hover:bg-slate-800/60 transition-colors">
+                        <img src="https://i.postimg.cc/qB1rRqmT/image.png" class="w-10 h-10 mb-1 object-contain drop-shadow-md">
+                        <span class="text-[10px] font-bold text-orange-300">Kitsune</span>
+                    </div>
+                     <div class="bg-slate-800/40 rounded-xl p-2 border border-white/5 flex flex-col items-center hover:bg-slate-800/60 transition-colors">
+                        <img src="https://i.postimg.cc/wxGrZmWf/image.png" class="w-10 h-10 mb-1 object-contain drop-shadow-md">
+                        <span class="text-[10px] font-bold text-amber-200">Mammoth</span>
+                    </div>
+                     <div class="bg-slate-800/40 rounded-xl p-2 border border-white/5 flex flex-col items-center hover:bg-slate-800/60 transition-colors">
+                        <img src="https://i.postimg.cc/MGZ2q8yT/image.png" class="w-10 h-10 mb-1 object-contain drop-shadow-md">
+                        <span class="text-[10px] font-bold text-red-300">T-Rex</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 mb-8">
+                <h3 class="text-white font-bold text-sm mb-3 border-l-2 border-purple-500 pl-2">Mastery Features</h3>
+                <div class="grid grid-cols-1 gap-3">
+                    <div class="bg-slate-900/40 p-3 rounded-lg border border-white/5 flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center shrink-0">
+                            <i class="fas fa-crosshairs text-purple-400 text-xs"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-200">Auto-Farm Level</div>
+                            <div class="text-[10px] text-slate-500">Reaches MAX level in under 40 mins.</div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/40 p-3 rounded-lg border border-white/5 flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center shrink-0">
+                            <i class="fas fa-eye text-blue-400 text-xs"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-200">ESP & Radar</div>
+                            <div class="text-[10px] text-slate-500">See fruits, chests, and players through walls.</div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900/40 p-3 rounded-lg border border-white/5 flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center shrink-0">
+                            <i class="fas fa-bolt text-red-400 text-xs"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-slate-200">Kill Aura</div>
+                            <div class="text-[10px] text-slate-500">Automatically defeats nearby enemies.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 mb-8">
+                <h3 class="text-white font-bold text-sm mb-3 border-l-2 border-blue-500 pl-2">Installation</h3>
+                <div class="relative pl-4 border-l border-slate-700 space-y-6">
+                    <div class="relative">
+                        <div class="absolute -left-[21px] bg-slate-900 w-3 h-3 rounded-full border-2 border-blue-500"></div>
+                        <p class="text-xs font-bold text-white mb-1">Download Script</p>
+                        <p class="text-[10px] text-slate-500 leading-relaxed">Click the button above to get the latest Lua script file tailored for your device.</p>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute -left-[21px] bg-slate-900 w-3 h-3 rounded-full border-2 border-blue-500"></div>
+                        <p class="text-xs font-bold text-white mb-1">Verify Session</p>
+                        <p class="text-[10px] text-slate-500 leading-relaxed">Complete a quick verification to unlock the keyless entry system.</p>
+                    </div>
+                    <div class="relative">
+                        <div class="absolute -left-[21px] bg-slate-900 w-3 h-3 rounded-full border-2 border-green-500"></div>
+                        <p class="text-xs font-bold text-white mb-1">Launch Game</p>
+                        <p class="text-[10px] text-slate-500 leading-relaxed">Open Roblox. The menu will appear automatically on the left side.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 pb-6">
+                 <div class="space-y-2 mb-8">
+                    <details class="group bg-slate-800/30 rounded-lg border border-white/5 open:bg-slate-800/50 transition-all">
+                        <summary class="flex justify-between items-center p-3 cursor-pointer list-none">
+                            <span class="text-xs font-semibold text-slate-300">Is this safe for my account?</span>
+                            <i class="fas fa-chevron-down text-[10px] text-slate-500 transition-transform group-open:rotate-180"></i>
+                        </summary>
+                        <div class="px-3 pb-3 text-[10px] text-slate-400 leading-relaxed">
+                            Yes. We use a cloud-based script execution method that bypasses Byfron anti-cheat detection.
+                        </div>
+                    </details>
+
+                    <details class="group bg-slate-800/30 rounded-lg border border-white/5 open:bg-slate-800/50 transition-all">
+                        <summary class="flex justify-between items-center p-3 cursor-pointer list-none">
+                            <span class="text-xs font-semibold text-slate-300">Does it work on iOS?</span>
+                            <i class="fas fa-chevron-down text-[10px] text-slate-500 transition-transform group-open:rotate-180"></i>
+                        </summary>
+                        <div class="px-3 pb-3 text-[10px] text-slate-400 leading-relaxed">
+                            Yes, choose the iOS option in the download menu. No jailbreak is required.
+                        </div>
+                    </details>
+                 </div>
+
+                 <div class="text-center pt-6 border-t border-white/5">
+                     <div class="flex justify-center space-x-4 text-slate-600 mb-4">
+                         <i class="fab fa-discord hover:text-indigo-400 transition-colors cursor-pointer text-lg"></i>
+                         <i class="fab fa-telegram hover:text-blue-400 transition-colors cursor-pointer text-lg"></i>
+                         <i class="fab fa-youtube hover:text-red-400 transition-colors cursor-pointer text-lg"></i>
+                     </div>
+                     <p class="text-[10px] text-slate-600">
+                         © 2024 BloxMods Ultimate.<br>Not affiliated with Roblox Corp.
+                     </p>
+                 </div>
+            </div>
+
+            <button onclick="openAIChat()" class="absolute bottom-6 right-6 w-12 h-12 rounded-full bg-gradient-to-r from-purple-600 to-blue-600 shadow-lg shadow-blue-900/50 flex items-center justify-center z-30 hover:scale-110 transition-transform group border border-white/20">
+                <i class="fas fa-sparkles text-white text-sm group-hover:animate-spin"></i>
+                <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-slate-900"></span>
+            </button>
+
+        </div> <div id="ai-modal" class="absolute inset-0 glass-modal z-50 hidden flex flex-col transition-opacity duration-200 opacity-0">
+            <div class="bg-slate-900/95 p-4 border-b border-slate-700 flex justify-between items-center shrink-0">
+                <div class="flex items-center">
+                    <div class="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center mr-3 shadow-inner">
+                        <i class="fas fa-robot text-white text-xs"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-sm">Blox Oracle AI</h3>
+                        <p class="text-[10px] text-slate-400">Ask about fruits, farming & PVP</p>
+                    </div>
+                </div>
+                <button onclick="closeAIChat()" class="text-slate-400 hover:text-white p-2 bg-white/5 rounded-lg transition-colors">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div id="chat-messages" class="flex-grow overflow-y-auto p-4 flex flex-col space-y-3 custom-scrollbar smooth-scroll">
+                <div class="ai-message">
+                    Yo! I'm the Oracle. Need the best fruit tier list or help installing the mod? 🎮
+                </div>
+            </div>
+
+            <div class="p-3 bg-slate-900/90 border-t border-slate-700 shrink-0 pb-6 sm:pb-3">
+                <div class="flex items-center bg-slate-800 rounded-xl px-4 py-2 border border-slate-600 focus-within:border-blue-500 transition-colors">
+                    <input type="text" id="chat-input" placeholder="Type your question..." class="bg-transparent border-none outline-none text-sm text-white flex-grow placeholder-slate-500 select-text" onkeypress="handleEnter(event)">
+                    <button onclick="sendMessage()" id="send-btn" class="ml-2 text-blue-400 hover:text-white transition-colors">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="platform-modal" class="absolute inset-0 glass-modal z-50 hidden flex items-center justify-center p-6 opacity-0 transition-opacity duration-300">
+            <div class="w-full max-w-xs bg-slate-900 border border-slate-700 rounded-2xl p-6 transform scale-95 transition-transform duration-300 shadow-2xl relative" id="modal-content">
+                
+                <div class="absolute -top-10 left-1/2 transform -translate-x-1/2 w-20 h-1 bg-blue-500/50 rounded-full blur-xl"></div>
+
+                <h3 class="text-center text-xl font-bold text-white mb-1">System Check</h3>
+                <p class="text-center text-slate-400 text-xs mb-6">Select your operating system.</p>
+                
+                <div class="space-y-3">
+                    <button onclick="selectPlatform('Android')" class="w-full bg-slate-800/50 hover:bg-slate-700 border border-slate-600 hover:border-green-500 text-white py-3 rounded-xl flex items-center justify-between px-4 transition-all group">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-green-500/10 flex items-center justify-center mr-3">
+                                <i class="fab fa-android text-lg text-green-500"></i>
+                            </div>
+                            <span class="font-semibold text-sm">Android</span>
+                        </div>
+                        <i class="fas fa-arrow-right text-slate-600 group-hover:text-green-500 transition-colors text-xs"></i>
+                    </button>
+
+                    <button onclick="selectPlatform('iOS')" class="w-full bg-slate-800/50 hover:bg-slate-700 border border-slate-600 hover:border-gray-300 text-white py-3 rounded-xl flex items-center justify-between px-4 transition-all group">
+                        <div class="flex items-center">
+                             <div class="w-8 h-8 rounded-full bg-gray-500/10 flex items-center justify-center mr-3">
+                                <i class="fab fa-apple text-lg text-gray-300"></i>
+                            </div>
+                            <span class="font-semibold text-sm">iOS / iPadOS</span>
+                        </div>
+                        <i class="fas fa-arrow-right text-slate-600 group-hover:text-white transition-colors text-xs"></i>
+                    </button>
+                </div>
+                
+                <button onclick="closePlatformModal()" class="w-full mt-4 py-2 text-slate-600 text-xs hover:text-slate-400 transition-colors">Cancel Operation</button>
+            </div>
+        </div>
+
+        <div id="progress-overlay" class="absolute inset-0 bg-slate-900 z-50 hidden flex flex-col items-center justify-center p-8">
+             <div class="w-full max-w-xs text-center">
+                <div class="relative w-24 h-24 mx-auto mb-8">
+                     <div class="absolute inset-0 rounded-full border-4 border-slate-800"></div>
+                     <div class="absolute inset-0 rounded-full border-4 border-t-blue-500 border-r-purple-500 border-b-transparent border-l-transparent animate-spin"></div>
+                     <i id="os-icon" class="fab fa-android absolute inset-0 flex items-center justify-center text-4xl text-white drop-shadow-lg"></i>
+                </div>
+
+                <h2 class="text-lg font-bold text-white mb-1 tracking-wide">INJECTING...</h2>
+                <p id="process-text" class="text-[10px] font-mono text-blue-400 mb-5 h-4">Initializing handshake...</p>
+
+                <div class="w-full bg-slate-800 rounded-full h-3 mb-2 overflow-hidden border border-slate-700 relative">
+                    <div id="progress-fill" class="bg-gradient-to-r from-blue-500 to-purple-600 h-full w-0 progress-bar-striped transition-all duration-75 ease-out relative">
+                        <div class="absolute right-0 top-0 bottom-0 w-2 bg-white/50 blur-sm"></div>
+                    </div>
+                </div>
+                <div class="flex justify-between text-[10px] font-mono text-slate-500">
+                    <span>00:00:0<span id="timer">3</span></span>
+                    <span id="percentage">0%</span>
+                </div>
+
+                <div class="mt-8 bg-black rounded-lg p-3 h-24 overflow-hidden text-left border border-slate-800 shadow-inner">
+                    <div id="console-output" class="font-mono text-[9px] text-green-500/80 flex flex-col justify-end min-h-full leading-tight">
+                        > _<br>
+                    </div>
+                </div>
+             </div>
+        </div>
+
+        <!-- =====================================================
+             CONTENT LOCKER MODAL
+             ===================================================== -->
+        <div id="locker-modal" class="absolute inset-0 z-50 hidden flex flex-col opacity-0 transition-opacity duration-300">
+
+            <!-- Header -->
+            <div class="bg-slate-900/95 px-4 py-3 border-b border-slate-700/80 flex justify-between items-center shrink-0">
+                <div class="flex items-center space-x-2">
+                    <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow">
+                        <i class="fas fa-lock text-white text-[10px]"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-white text-sm leading-none">Script Locked</h2>
+                        <p class="text-[9px] text-slate-500 mt-0.5">Complete 1 offer to unlock</p>
+                    </div>
+                </div>
+                <button id="locker-close-btn" onclick="closeLockerModal()" class="text-slate-500 hover:text-slate-300 p-1.5 bg-white/5 rounded-lg transition-colors" aria-label="Close locker">
+                    <i class="fas fa-times text-xs"></i>
+                </button>
+            </div>
+
+            <!-- Scrollable body -->
+            <div class="flex-grow overflow-y-auto custom-scrollbar smooth-scroll px-4 py-5 flex flex-col">
+
+                <!-- Hero badge -->
+                <div class="text-center mb-5">
+                    <div class="inline-flex flex-col items-center">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-600/20 to-purple-600/20 border border-indigo-500/20 flex items-center justify-center mb-3 relative">
+                            <i class="fas fa-shield-halved text-2xl text-indigo-400 lock-glow"></i>
+                            <span class="absolute -top-1 -right-1 w-4 h-4 bg-yellow-500 rounded-full border-2 border-slate-900 flex items-center justify-center">
+                                <i class="fas fa-star text-[6px] text-slate-900"></i>
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-400 leading-relaxed max-w-[220px]">
+                            Your free script is ready. Complete <span class="text-indigo-400 font-bold">any one offer</span> below to instantly unlock it.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="dot-divider">
+                    <span class="text-[9px] text-slate-600 uppercase tracking-widest font-bold px-2">Available Offers</span>
+                </div>
+
+                <!-- Loading state -->
+                <div id="locker-loading" class="flex flex-col items-center justify-center py-10 space-y-4">
+                    <div class="locker-spinner"></div>
+                    <div class="text-center">
+                        <p id="locker-loading-text" class="text-xs text-blue-400 font-mono font-bold loading-text">Connecting to server...</p>
+                        <p class="text-[9px] text-slate-600 mt-1">Fetching personalized offers</p>
+                    </div>
+                </div>
+
+                <!-- Offers container (populated by JS) -->
+                <div id="locker-offers" class="space-y-3 hidden"></div>
+
+                <!-- Error / empty state -->
+                <div id="locker-error" class="hidden">
+                    <div class="locker-error-box">
+                        <div class="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-satellite-dish text-red-400 text-base"></i>
+                        </div>
+                        <p class="text-sm font-bold text-slate-200 mb-1">No offers available</p>
+                        <p class="text-[10px] text-slate-500 leading-relaxed mb-4">
+                            We couldn't load offers for your region. Please try again in a moment.
+                        </p>
+                        <button onclick="fetchOffers()" id="locker-retry-btn" class="text-[10px] font-bold text-indigo-400 hover:text-indigo-300 border border-indigo-500/30 hover:border-indigo-400/50 rounded-lg px-4 py-2 transition-colors">
+                            <i class="fas fa-rotate-right mr-1"></i> Retry
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Footer note -->
+            <div class="px-4 py-3 border-t border-slate-800 bg-slate-900/80 shrink-0">
+                <p class="text-[9px] text-slate-600 text-center leading-relaxed">
+                    <i class="fas fa-circle-info mr-1"></i>
+                    Offers are provided by our sponsors. Completing one supports free access for everyone.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        // Configuration: PLACE YOUR OGADS LINK HERE
+        const OGADS_LINK = "https://lockedapp.org/cl/i/rn785v"; 
+        // Use a key that is safe to expose or handle via proxy in production
+        const apiKey = ""; 
+        
+        let selectedOS = 'Android';
+
+        // --- AI Chat Logic ---
+
+        function openAIChat() {
+            const modal = document.getElementById('ai-modal');
+            modal.classList.remove('hidden');
+            // Minimal delay to allow display block to render before opacity transition
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-0');
+                setTimeout(() => {
+                    document.getElementById('chat-input').focus();
+                }, 100);
+            });
+        }
+
+        function closeAIChat() {
+            const modal = document.getElementById('ai-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        function handleEnter(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const sendBtn = document.getElementById('send-btn');
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            addMessage(text, 'user');
+            input.value = '';
+            input.disabled = true;
+            sendBtn.disabled = true;
+
+            const loadingId = addLoadingIndicator();
+            scrollToBottom();
+
+            try {
+                // Simulated delay for realism if API key is missing
+                if(!apiKey) {
+                    await new Promise(r => setTimeout(r, 1500));
+                    removeMessage(loadingId);
+                    addMessage("I need an API key to function fully, but trust me, the Mammoth fruit is OP for sea events!", 'ai');
+                } else {
+                    const response = await callGeminiAPI(text);
+                    removeMessage(loadingId);
+                    addMessage(response, 'ai');
+                }
+            } catch (error) {
+                console.error(error);
+                removeMessage(loadingId);
+                addMessage("Connection interference. Try again shortly.", 'ai');
+            }
+
+            input.disabled = false;
+            sendBtn.disabled = false;
+            input.focus();
+            scrollToBottom();
+        }
+
+        function addMessage(text, sender) {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = sender === 'user' ? 'user-message' : 'ai-message';
+            
+            if (sender === 'ai') {
+                 div.innerHTML = marked.parse(text);
+            } else {
+                div.textContent = text;
+            }
+            
+            container.appendChild(div);
+            return div.id;
+        }
+
+        function addLoadingIndicator() {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = 'ai-message flex items-center space-x-1 h-8 w-16 justify-center';
+            div.id = 'loading-' + Date.now();
+            div.innerHTML = `
+                <div class="w-1 h-1 bg-slate-400 rounded-full typing-dot"></div>
+                <div class="w-1 h-1 bg-slate-400 rounded-full typing-dot"></div>
+                <div class="w-1 h-1 bg-slate-400 rounded-full typing-dot"></div>
+            `;
+            container.appendChild(div);
+            return div.id;
+        }
+
+        function removeMessage(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+
+        function scrollToBottom() {
+            const container = document.getElementById('chat-messages');
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function callGeminiAPI(userQuery) {
+            const systemPrompt = "You are the Blox Oracle, a cool gamer AI. Keep answers very short (under 25 words). Use slang like OP, buff, grinding. Recommend using the mod menu for easy wins.";
+            
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: userQuery }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    })
+                });
+
+                if (!response.ok) throw new Error('API Error');
+                const data = await response.json();
+                return data.candidates?.[0]?.content?.parts?.[0]?.text || "Server busy.";
+            } catch (e) {
+                return "Connection error.";
+            }
+        }
+
+        // --- Modal & Injection Logic ---
+
+        function openPlatformModal() {
+            const modal = document.getElementById('platform-modal');
+            const content = document.getElementById('modal-content');
+            
+            modal.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            });
+        }
+
+        function closePlatformModal() {
+            const modal = document.getElementById('platform-modal');
+            const content = document.getElementById('modal-content');
+            
+            modal.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function selectPlatform(os) {
+            selectedOS = os;
+            const iconClass = os === 'Android' ? 'fa-android' : 'fa-apple';
+            const iconEl = document.getElementById('os-icon');
+            iconEl.className = `fab ${iconClass} absolute inset-0 flex items-center justify-center text-4xl text-white drop-shadow-lg`;
+            closePlatformModal();
+            setTimeout(() => {
+                startDownload();
+            }, 300);
+        }
+
+        function startDownload() {
+            const progressOverlay = document.getElementById('progress-overlay');
+            const progressBar = document.getElementById('progress-fill');
+            const percentageText = document.getElementById('percentage');
+            const processText = document.getElementById('process-text');
+            
+            progressOverlay.classList.remove('hidden');
+
+            let width = 0;
+            const interval = setInterval(() => {
+                let increment = Math.random() * 1.5 + 0.5; 
+                if (width > 80) increment = 0.2; // Slow down at end
+
+                width += increment;
+
+                if (width >= 100) {
+                    width = 100;
+                    clearInterval(interval);
+                    processText.innerText = "Injection Complete!";
+                    processText.className = "text-[10px] font-mono text-green-400 font-bold mb-5 h-4 animate-pulse";
+                    addLog("SUCCESS! Redirecting...");
+                    setTimeout(() => {
+                        window.location.href = OGADS_LINK;
+                    }, 800);
+                }
+
+                progressBar.style.width = width + '%';
+                percentageText.innerText = Math.floor(width) + '%';
+
+                // Dynamic Console Logs
+                if (width > 5 && width < 6.5) { processText.innerText = "Handshake Protocol..."; }
+                if (width > 10 && width < 11) { addLog(`Target: ${selectedOS} Kernel`); }
+                if (width > 25 && width < 26) { addLog("Bypassing Byfron..."); }
+                if (width > 40 && width < 41) { processText.innerText = "Uploading Script..."; addLog("Sending Payload [4.2MB]..."); }
+                if (width > 65 && width < 66) { addLog("Hooking Main Function..."); }
+                if (width > 85 && width < 86) { processText.innerText = "Finalizing..."; addLog("Clearing traces..."); }
+
+            }, 30);
+        }
+
+        function addLog(text) {
+            const consoleOutput = document.getElementById('console-output');
+            consoleOutput.innerHTML += `> ${text}<br>`;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        // =========================================================
+        // CONTENT LOCKER LOGIC
+        // =========================================================
+
+        /** Loading messages cycled while the API request is in flight */
+        const LOADING_STEPS = [
+            'Connecting to server...',
+            'Generating resources...',
+            'Fetching sponsor offers...',
+            'Almost there...',
+        ];
+        let _loadingTimer = null;
+        let _loadingIndex = 0;
+
+        function openLockerModal() {
+            const modal = document.getElementById('locker-modal');
+            modal.classList.remove('hidden');
+            requestAnimationFrame(() => {
+                modal.classList.remove('opacity-0');
+            });
+            fetchOffers();
+        }
+
+        function closeLockerModal() {
+            const modal = document.getElementById('locker-modal');
+            modal.classList.add('opacity-0');
+            clearInterval(_loadingTimer);
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                // Reset to loading state for next open
+                _showLockerLoading();
+            }, 300);
+        }
+
+        function _showLockerLoading() {
+            document.getElementById('locker-loading').classList.remove('hidden');
+            document.getElementById('locker-offers').classList.add('hidden');
+            document.getElementById('locker-error').classList.add('hidden');
+            document.getElementById('locker-offers').innerHTML = '';
+
+            // Cycle through status messages
+            _loadingIndex = 0;
+            clearInterval(_loadingTimer);
+            const txt = document.getElementById('locker-loading-text');
+            txt.textContent = LOADING_STEPS[0];
+            _loadingTimer = setInterval(() => {
+                _loadingIndex = (_loadingIndex + 1) % LOADING_STEPS.length;
+                txt.textContent = LOADING_STEPS[_loadingIndex];
+            }, 900);
+        }
+
+        function _showLockerOffers(offers) {
+            clearInterval(_loadingTimer);
+            document.getElementById('locker-loading').classList.add('hidden');
+            document.getElementById('locker-error').classList.add('hidden');
+
+            const container = document.getElementById('locker-offers');
+            container.innerHTML = '';
+
+            offers.forEach((offer, i) => {
+                const card = document.createElement('div');
+                card.className = 'offer-card';
+                card.style.animationDelay = `${i * 70}ms`;
+
+                const imgHtml = offer.image
+                    ? `<img src="${_esc(offer.image)}" alt="${_esc(offer.name)}"
+                            class="w-12 h-12 rounded-xl object-cover border border-slate-700/80 shrink-0 bg-slate-800"
+                            onerror="this.style.display='none'">`
+                    : `<div class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-600/20 to-purple-600/20 border border-indigo-500/20 flex items-center justify-center shrink-0">
+                           <i class="fas fa-gift text-indigo-400 text-lg"></i>
+                       </div>`;
+
+                const payoutHtml = parseFloat(offer.payout) > 0
+                    ? `<span class="payout-badge">+$${parseFloat(offer.payout).toFixed(2)}</span>`
+                    : '';
+
+                card.innerHTML = `
+                    <div class="p-3 flex items-start space-x-3">
+                        ${imgHtml}
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-2 mb-1">
+                                <span class="text-xs font-bold text-slate-100 leading-snug">${_esc(offer.name)}</span>
+                                ${payoutHtml}
+                            </div>
+                            <p class="text-[10px] text-slate-500 leading-relaxed mb-3"
+                               style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">
+                               ${_esc(offer.description)}
+                            </p>
+                            <a href="${_esc(offer.link)}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="offer-cta"
+                               id="offer-cta-${i}">
+                                <i class="fas fa-arrow-right mr-1.5 text-[10px]"></i>
+                                ${_esc(offer.cta || 'START OFFER \u2192')}
+                            </a>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            container.classList.remove('hidden');
+        }
+
+        function _showLockerError() {
+            clearInterval(_loadingTimer);
+            document.getElementById('locker-loading').classList.add('hidden');
+            document.getElementById('locker-offers').classList.add('hidden');
+            document.getElementById('locker-error').classList.remove('hidden');
+        }
+
+        async function fetchOffers() {
+            _showLockerLoading();
+
+            try {
+                const res = await fetch('/api/offers');
+
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+                const data = await res.json();
+
+                if (!data.success || !Array.isArray(data.offers) || data.offers.length === 0) {
+                    _showLockerError();
+                    return;
+                }
+
+                // Brief UX delay so the loading animation registers
+                await new Promise(r => setTimeout(r, 600));
+                _showLockerOffers(data.offers);
+
+            } catch (err) {
+                console.error('[Locker] fetchOffers error:', err);
+                _showLockerError();
+            }
+        }
+
+        /** Escape a string for safe HTML insertion (prevents XSS from API data) */
+        function _esc(str) {
+            if (typeof str !== 'string') return '';
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+    </script>
+</body>
+</html>

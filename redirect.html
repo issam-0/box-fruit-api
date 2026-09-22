@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="referrer" content="unsafe-url" />
+  <title>Loading Offer...</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #131921; color: #F0F2F4;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      min-height: 100vh; gap: 20px; text-align: center; padding: 20px;
+    }
+    .spinner {
+      width: 48px; height: 48px;
+      border: 4px solid rgba(255,153,0,0.2);
+      border-top-color: #FF9900;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    p { font-size: 1rem; color: #B0BEC5; }
+    small { font-size: 0.75rem; color: #6B7B8D; }
+  </style>
+</head>
+<body>
+  <div class="spinner"></div>
+  <p>Loading your offer...</p>
+  <small>You will be redirected automatically.</small>
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var dest = params.get('url');
+      if (dest) {
+        window.location.replace(dest);
+      } else {
+        window.location.replace('/');
+      }
+    })();
+  </script>
+</body>
+</html>

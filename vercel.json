@@ -1,0 +1,14 @@
+{
+  "functions": {
+    "api/offers.js":   { "maxDuration": 10 },
+    "api/postback.js": { "maxDuration": 5  }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store, no-cache" }
+      ]
+    }
+  ]
+}
