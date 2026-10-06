@@ -1,1000 +1,178 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Blox Fruits - Ultimate Mod Menu</title>
-    <meta name="description" content="BloxMods Ultimate — the #1 keyless Blox Fruits mod menu. Auto-farm, ESP, Kill Aura and more. Get your free script instantly.">
-
-    <!-- Performance: preconnect to every external origin used on this page -->
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-
+    <title>Brawl Community Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
 
     <style>
-        /* =====================================================
-           RESET & BASE
-           ===================================================== */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
             font-family: 'Outfit', sans-serif;
-            background-color: #0f172a;
+            background-color: #0b0f19;
             background-image:
-                radial-gradient(at 0%   0%, hsla(253,16%,7%,1)  0, transparent 50%),
-                radial-gradient(at 50%  0%, hsla(225,39%,30%,1) 0, transparent 50%),
-                radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-            color: #cbd5e1;            /* slate-300 */
-            height: 100dvh;
-            width: 100vw;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overscroll-behavior: none;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-        }
-
-        /* =====================================================
-           LAYOUT — MAIN PANEL
-           ===================================================== */
-        .app-panel {
-            width: 100%;
-            height: 100%;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.08);
-            overflow: hidden;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-        @media (min-width: 640px) {
-            .app-panel {
-                height: 90vh;
-                max-width: 400px;
-                border-radius: 24px;
-            }
-        }
-
-        /* =====================================================
-           STATUS BAR
-           ===================================================== */
-        .status-bar {
-            background: rgba(15, 23, 42, 0.8);
-            padding: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 10px;
-            font-family: monospace;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            backdrop-filter: blur(12px);
-            flex-shrink: 0;
-            z-index: 20;
-        }
-        .status-online {
-            display: flex;
-            align-items: center;
-            color: #34d399; /* emerald-400 */
-            font-weight: 700;
-        }
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background: #10b981; /* emerald-500 */
-            border-radius: 50%;
-            margin-right: 8px;
-            animation: pulse-dot 2s cubic-bezier(0.4,0,0.6,1) infinite;
-        }
-        @keyframes pulse-dot {
-            0%,100% { opacity: 1; }
-            50%      { opacity: 0.4; }
-        }
-        .status-version { color: #64748b; } /* slate-500 */
-
-        /* =====================================================
-           SCROLL AREA
-           ===================================================== */
-        .scroll-area {
-            overflow-y: auto;
-            flex-grow: 1;
-            position: relative;
-            -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
-            padding-bottom: 96px;
-        }
-        .scroll-area::-webkit-scrollbar { width: 4px; }
-        .scroll-area::-webkit-scrollbar-track { background: transparent; }
-        .scroll-area::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        .scroll-area { scrollbar-width: thin; scrollbar-color: #334155 transparent; }
-
-        /* =====================================================
-           HERO SECTION
-           ===================================================== */
-        .hero-section { padding: 32px 24px 24px; }
-
-        .hero-header { text-align: center; margin-bottom: 24px; }
-
-        .hero-badge {
-            display: inline-block;
-            margin-bottom: 8px;
-            padding: 4px 12px;
-            border-radius: 9999px;
-            background: rgba(59,130,246,0.1);
-            border: 1px solid rgba(59,130,246,0.2);
-            color: #60a5fa; /* blue-400 */
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-        }
-        .hero-title {
-            font-size: 2.25rem;
-            font-weight: 900;
-            letter-spacing: -0.05em;
-            color: #fff;
-            margin-bottom: 4px;
-            text-shadow: 0 0 40px rgba(0,0,0,0.5);
-            line-height: 1;
-        }
-        .hero-title-accent {
-            background: linear-gradient(90deg, #60a5fa, #a855f7);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .hero-subtitle { font-size: 0.875rem; color: #94a3b8; font-weight: 500; } /* slate-400 */
-
-        /* Script card */
-        .script-card {
-            background: linear-gradient(135deg, rgba(30,41,59,0.5), rgba(15,23,42,0.5));
-            padding: 20px;
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        .script-card-glow {
-            position: absolute;
-            top: -40px; right: -40px;
-            width: 128px; height: 128px;
-            background: rgba(59,130,246,0.2);
-            border-radius: 50%;
-            filter: blur(40px);
-            pointer-events: none;
-            transition: background 0.3s;
-        }
-        .script-card:hover .script-card-glow { background: rgba(59,130,246,0.3); }
-        .script-card-inner {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            position: relative;
-            z-index: 1;
-        }
-        .script-thumb {
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
-            object-fit: cover;
-            border: 1px solid #334155;
-            animation: float 4s ease-in-out infinite;
-            flex-shrink: 0;
-        }
-        .script-info { flex: 1; }
-        .script-name {
-            color: #fff;
-            font-weight: 700;
-            font-size: 1.125rem;
-            line-height: 1.25;
-            margin-bottom: 4px;
-        }
-        .badge-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
-        .badge {
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: 600;
-        }
-        .badge-green {
-            background: rgba(34,197,94,0.2);
-            color: #4ade80;
-            border: 1px solid rgba(34,197,94,0.2);
-        }
-        .badge-purple {
-            background: rgba(168,85,247,0.2);
-            color: #c084fc;
-            border: 1px solid rgba(168,85,247,0.2);
-        }
-
-        /* =====================================================
-           INJECT BUTTON
-           ===================================================== */
-        .inject-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            background: #2563eb;
-            color: #fff;
-            font-size: 0.75rem;
-            font-weight: 700;
-            padding: 10px 0;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(30,58,138,0.5);
-            transition: background 0.2s;
-            position: relative;
-            overflow: hidden;
-            font-family: inherit;
-        }
-        .inject-btn:hover { background: #3b82f6; }
-        .inject-btn i { margin-right: 8px; }
-        /* Shine sweep */
-        .inject-btn::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shine 3s infinite;
-        }
-        @keyframes shine {
-            0%   { left: -100%; }
-            20%  { left: 100%; }
-            100% { left: 100%; }
-        }
-
-        /* =====================================================
-           SECTIONS
-           ===================================================== */
-        .section { padding: 0 24px 32px; }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        .section-title {
-            color: #fff;
-            font-weight: 700;
-            font-size: 0.875rem;
-        }
-        .section-meta { font-size: 10px; color: #64748b; }
-
-        .section-title-bordered {
-            color: #fff;
-            font-weight: 700;
-            font-size: 0.875rem;
-            margin-bottom: 12px;
-            padding-left: 8px;
-        }
-        .section-title-bordered.purple { border-left: 2px solid #a855f7; }
-        .section-title-bordered.blue   { border-left: 2px solid #3b82f6; }
-
-        /* =====================================================
-           ASSET SPAWNER GRID
-           ===================================================== */
-        .asset-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-        .asset-item {
-            background: rgba(30,41,59,0.4);
-            border-radius: 12px;
-            padding: 8px;
-            border: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: background 0.2s;
-        }
-        .asset-item:hover { background: rgba(30,41,59,0.6); }
-        .asset-img { width: 40px; height: 40px; margin-bottom: 4px; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); }
-        .asset-name { font-size: 10px; font-weight: 700; }
-        .asset-name.orange { color: #fdba74; }   /* orange-300 */
-        .asset-name.amber  { color: #fde68a; }   /* amber-200 */
-        .asset-name.red    { color: #fca5a5; }   /* red-300 */
-
-        /* =====================================================
-           FEATURE LIST
-           ===================================================== */
-        .feature-list { display: flex; flex-direction: column; gap: 12px; }
-
-        .feature-item {
-            background: rgba(15,23,42,0.4);
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .feature-icon {
-            width: 32px; height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .feature-icon.purple { background: rgba(168,85,247,0.1); color: #c084fc; }
-        .feature-icon.blue   { background: rgba(59,130,246,0.1);  color: #60a5fa; }
-        .feature-icon.red    { background: rgba(239,68,68,0.1);   color: #f87171; }
-        .feature-icon i      { font-size: 0.75rem; }
-        .feature-label { font-size: 0.75rem; font-weight: 700; color: #e2e8f0; } /* slate-200 */
-        .feature-desc  { font-size: 10px; color: #64748b; margin-top: 2px; }
-
-        /* =====================================================
-           INSTALLATION TIMELINE
-           ===================================================== */
-        .timeline {
-            position: relative;
-            padding-left: 16px;
-            border-left: 1px solid #334155;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-        .timeline-item { position: relative; }
-        .timeline-dot {
-            position: absolute;
-            left: -21px;
-            top: 0;
-            width: 12px; height: 12px;
-            border-radius: 50%;
-            background: #0f172a;
-            border: 2px solid;
-        }
-        .timeline-dot.blue  { border-color: #3b82f6; }
-        .timeline-dot.green { border-color: #22c55e; }
-        .timeline-step { font-size: 0.75rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
-        .timeline-desc { font-size: 10px; color: #64748b; line-height: 1.6; }
-
-        /* =====================================================
-           FAQ
-           ===================================================== */
-        .faq-section { padding: 0 24px 24px; }
-
-        .faq-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 32px; }
-
-        .faq-item {
-            background: rgba(30,41,59,0.3);
-            border-radius: 8px;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: background 0.2s;
-        }
-        .faq-item[open] { background: rgba(30,41,59,0.5); }
-        .faq-summary {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            cursor: pointer;
-            list-style: none;
-            font-size: 0.75rem;
-            font-weight: 600;
+                radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(234, 179, 8, 0.15), transparent 25%);
             color: #cbd5e1;
         }
-        .faq-summary::-webkit-details-marker { display: none; }
-        .faq-chevron {
-            font-size: 10px;
-            color: #64748b;
-            transition: transform 0.2s;
-            flex-shrink: 0;
-        }
-        .faq-item[open] .faq-chevron { transform: rotate(180deg); }
-        .faq-body { padding: 0 12px 12px; font-size: 10px; color: #94a3b8; line-height: 1.6; }
 
-        /* =====================================================
-           FOOTER
-           ===================================================== */
-        .footer-section {
-            text-align: center;
-            padding-top: 24px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-        }
-        .social-row {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-bottom: 16px;
-            color: #475569; /* slate-600 */
-        }
-        .social-row i { font-size: 1.125rem; cursor: pointer; transition: color 0.2s; }
-        .social-row i.discord:hover  { color: #818cf8; }
-        .social-row i.telegram:hover { color: #60a5fa; }
-        .social-row i.youtube:hover  { color: #f87171; }
-        .footer-copy { font-size: 10px; color: #475569; line-height: 1.6; }
-
-        /* =====================================================
-           AI CHAT FAB
-           ===================================================== */
-        .ai-fab {
-            position: absolute;
-            bottom: 24px; right: 24px;
-            width: 48px; height: 48px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #9333ea, #2563eb);
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 4px 20px rgba(30,58,138,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            z-index: 30;
-            transition: transform 0.2s;
-        }
-        .ai-fab:hover { transform: scale(1.1); }
-        .ai-fab i { color: #fff; font-size: 0.875rem; }
-        .ai-fab:hover i { animation: spin-once 0.5s linear; }
-        @keyframes spin-once { to { transform: rotate(360deg); } }
-        .ai-fab-badge {
-            position: absolute;
-            top: -4px; right: -4px;
-            width: 12px; height: 12px;
-            background: #ef4444;
-            border-radius: 50%;
-            border: 2px solid #0f172a;
+        /* Glassmorphism utilities */
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* =====================================================
-           MODALS (SHARED BASE)
-           ===================================================== */
+        /* Modal Base */
         .modal-overlay {
-            position: absolute;
+            position: fixed;
             inset: 0;
             z-index: 50;
-            display: none;          /* toggled by JS */
+            display: none;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
             opacity: 0;
-            transition: opacity 0.2s;
+            transition: opacity 0.3s ease;
+            background: rgba(5, 8, 20, 0.9);
+            backdrop-filter: blur(10px);
         }
+
         .modal-overlay.active {
             display: flex;
         }
-        .glass-modal-bg {
-            background: rgba(10,15,30,0.95);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
+
+        /* Neon utilities */
+        .neon-text-blue {
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.8), 0 0 20px rgba(59, 130, 246, 0.5);
         }
 
-        /* =====================================================
-           AI CHAT MODAL
-           ===================================================== */
-        #ai-modal { transition: opacity 0.2s; }
-
-        .ai-header {
-            background: rgba(15,23,42,0.95);
-            padding: 16px;
-            border-bottom: 1px solid #334155;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
-        .ai-header-left { display: flex; align-items: center; }
-        .ai-avatar {
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #a855f7, #3b82f6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-        }
-        .ai-avatar i { color: #fff; font-size: 0.75rem; }
-        .ai-title { font-weight: 700; color: #fff; font-size: 0.875rem; }
-        .ai-subtitle { font-size: 10px; color: #94a3b8; }
-
-        .modal-close-btn {
-            color: #94a3b8;
-            background: rgba(255,255,255,0.05);
-            border: none;
-            padding: 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: color 0.2s;
-            font-family: inherit;
-        }
-        .modal-close-btn:hover { color: #fff; }
-
-        #chat-messages {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            -webkit-overflow-scrolling: touch;
-        }
-        #chat-messages::-webkit-scrollbar { width: 4px; }
-        #chat-messages::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-
-        .ai-message {
-            background: linear-gradient(135deg, rgba(30,58,138,0.4), rgba(30,41,59,0.4));
-            border: 1px solid rgba(59,130,246,0.2);
-            border-radius: 12px 12px 12px 0;
-            padding: 10px 14px;
-            font-size: 0.85rem;
-            color: #e2e8f0;
-            align-self: flex-start;
-            max-width: 85%;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .user-message {
-            background: linear-gradient(135deg, rgba(21,128,61,0.4), rgba(20,83,45,0.4));
-            border: 1px solid rgba(34,197,94,0.3);
-            border-radius: 12px 12px 0 12px;
-            padding: 10px 14px;
-            font-size: 0.85rem;
-            color: #fff;
-            align-self: flex-end;
-            max-width: 85%;
+        .neon-btn-yellow {
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.6);
         }
 
-        .typing-dot { animation: typing 1.4s infinite ease-in-out both; }
-        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
-        @keyframes typing {
-            0%,80%,100% { transform: scale(0); }
-            40%          { transform: scale(1); }
-        }
-        .typing-indicator {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            height: 32px;
-            width: 64px;
-            justify-content: center;
-        }
-        .typing-indicator span {
-            display: inline-block;
-            width: 4px; height: 4px;
-            background: #94a3b8;
-            border-radius: 50%;
+        .hidden {
+            display: none !important;
         }
 
-        .chat-input-row {
-            padding: 12px;
-            background: rgba(15,23,42,0.9);
-            border-top: 1px solid #334155;
-            flex-shrink: 0;
-            padding-bottom: 24px;
-        }
-        @media (min-width: 640px) { .chat-input-row { padding-bottom: 12px; } }
-
-        .chat-input-wrap {
-            display: flex;
-            align-items: center;
-            background: #1e293b;
-            border-radius: 12px;
-            padding: 8px 16px;
-            border: 1px solid #475569;
-            transition: border-color 0.2s;
-        }
-        .chat-input-wrap:focus-within { border-color: #3b82f6; }
-        #chat-input {
-            background: transparent;
-            border: none;
-            outline: none;
-            font-size: 0.875rem;
-            color: #fff;
-            flex: 1;
-            font-family: inherit;
-        }
-        #chat-input::placeholder { color: #475569; }
-        #send-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #60a5fa;
-            margin-left: 8px;
-            transition: color 0.2s;
-            font-size: 1rem;
-        }
-        #send-btn:hover { color: #fff; }
-
-        /* =====================================================
-           PLATFORM MODAL
-           ===================================================== */
-        #platform-modal {
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-            transition: opacity 0.3s;
-        }
-        .platform-card {
-            width: 100%;
-            max-width: 320px;
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 16px;
-            padding: 24px;
-            transform: scale(0.95);
-            transition: transform 0.3s;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-            position: relative;
-        }
-        .platform-card.open { transform: scale(1); }
-        .platform-card-glow {
-            position: absolute;
-            top: -40px; left: 50%;
-            transform: translateX(-50%);
-            width: 80px; height: 4px;
-            background: rgba(59,130,246,0.5);
-            border-radius: 9999px;
-            filter: blur(20px);
-        }
-        .platform-title { text-align: center; font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 4px; }
-        .platform-sub   { text-align: center; font-size: 0.75rem; color: #94a3b8; margin-bottom: 24px; }
-
-        .platform-list { display: flex; flex-direction: column; gap: 12px; }
-        .platform-btn {
-            width: 100%;
-            background: rgba(30,41,59,0.5);
-            border: 1px solid #475569;
-            color: #fff;
-            padding: 12px 16px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            transition: background 0.2s, border-color 0.2s;
-            font-family: inherit;
-        }
-        .platform-btn:hover { background: #1e293b; }
-        .platform-btn.android:hover { border-color: #22c55e; }
-        .platform-btn.ios:hover     { border-color: #e2e8f0; }
-        .platform-btn-left { display: flex; align-items: center; }
-        .platform-icon {
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-        }
-        .platform-icon.android { background: rgba(34,197,94,0.1); }
-        .platform-icon.ios     { background: rgba(156,163,175,0.1); }
-        .platform-icon.android i { color: #22c55e; font-size: 1.125rem; }
-        .platform-icon.ios     i { color: #d1d5db; font-size: 1.125rem; }
-        .platform-label { font-weight: 600; font-size: 0.875rem; }
-        .platform-arrow { color: #475569; font-size: 0.75rem; transition: color 0.2s; }
-        .platform-btn.android:hover .platform-arrow { color: #22c55e; }
-        .platform-btn.ios:hover     .platform-arrow { color: #e2e8f0; }
-        .platform-cancel {
-            display: block;
-            width: 100%;
-            margin-top: 16px;
-            padding: 8px;
-            background: none;
-            border: none;
-            font-size: 0.75rem;
-            color: #475569;
-            cursor: pointer;
-            font-family: inherit;
-            transition: color 0.2s;
-        }
-        .platform-cancel:hover { color: #94a3b8; }
-
-        /* =====================================================
-           PROGRESS OVERLAY
-           ===================================================== */
-        #progress-overlay {
-            background: #0f172a;
-            align-items: center;
-            justify-content: center;
-            padding: 32px;
-        }
-        .progress-inner { width: 100%; max-width: 320px; text-align: center; }
-
-        .spinner-ring-wrap {
-            position: relative;
-            width: 96px; height: 96px;
-            margin: 0 auto 32px;
-        }
-        .spinner-track {
-            position: absolute; inset: 0;
-            border-radius: 50%;
-            border: 4px solid #1e293b;
-        }
-        .spinner-arc {
-            position: absolute; inset: 0;
-            border-radius: 50%;
-            border: 4px solid transparent;
-            border-top-color: #3b82f6;
-            border-right-color: #a855f7;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        #os-icon {
-            position: absolute; inset: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.25rem;
-            color: #fff;
-            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.5));
-        }
-
-        .progress-title { font-size: 1.125rem; font-weight: 700; color: #fff; margin-bottom: 4px; letter-spacing: 0.05em; }
-        #process-text { font-size: 10px; font-family: monospace; color: #60a5fa; margin-bottom: 20px; height: 16px; display: block; }
-
-        .progress-track {
-            width: 100%;
-            background: #1e293b;
-            border-radius: 9999px;
-            height: 12px;
-            margin-bottom: 8px;
-            overflow: hidden;
-            border: 1px solid #334155;
-            position: relative;
-        }
-        #progress-fill {
-            background: linear-gradient(90deg, #3b82f6, #9333ea);
-            height: 100%;
-            width: 0;
-            transition: width 75ms ease-out;
-            position: relative;
-            background-size: 1rem 1rem;
-            background-image: linear-gradient(45deg,rgba(255,255,255,.15) 25%,transparent 25%,transparent 50%,rgba(255,255,255,.15) 50%,rgba(255,255,255,.15) 75%,transparent 75%,transparent);
-            animation: progress-stripes 1s linear infinite;
-        }
-        @keyframes progress-stripes {
-            0%   { background-position: 1rem 0; }
-            100% { background-position: 0 0; }
-        }
-        #progress-fill::after {
-            content: '';
-            position: absolute;
-            right: 0; top: 0; bottom: 0;
-            width: 8px;
-            background: rgba(255,255,255,0.5);
-            filter: blur(3px);
-        }
-        .progress-stats {
-            display: flex;
-            justify-content: space-between;
-            font-size: 10px;
-            font-family: monospace;
-            color: #64748b;
-        }
-
-        .console-box {
-            margin-top: 32px;
-            background: #000;
-            border-radius: 8px;
-            padding: 12px;
-            height: 96px;
-            overflow: hidden;
-            text-align: left;
-            border: 1px solid #1e293b;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.5);
-        }
-        #console-output {
-            font-family: monospace;
-            font-size: 9px;
-            color: rgba(74,222,128,0.8);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            min-height: 100%;
-            line-height: 1.4;
-        }
-
-        /* =====================================================
-           CONTENT LOCKER MODAL
-           ===================================================== */
-        #locker-modal {
-            background: rgba(5,8,20,0.97);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            transition: opacity 0.3s;
-        }
-
-        .locker-header {
-            background: rgba(15,23,42,0.95);
-            padding: 12px 16px;
-            border-bottom: 1px solid rgba(51,65,85,0.8);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-shrink: 0;
-        }
-        .locker-header-left { display: flex; align-items: center; gap: 8px; }
-        .locker-icon-wrap {
-            width: 28px; height: 28px;
-            border-radius: 8px;
-            background: linear-gradient(135deg, #6366f1, #9333ea);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-        .locker-icon-wrap i { color: #fff; font-size: 10px; }
-        .locker-title { font-weight: 700; color: #fff; font-size: 0.875rem; line-height: 1; }
-        .locker-sub   { font-size: 9px; color: #64748b; margin-top: 2px; }
-
-        .locker-body {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 20px 16px;
-            display: flex;
-            flex-direction: column;
-            -webkit-overflow-scrolling: touch;
-        }
-        .locker-body::-webkit-scrollbar { width: 4px; }
-        .locker-body::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-
-        /* Hero badge */
-        .locker-hero { text-align: center; margin-bottom: 20px; }
-        .locker-hero-inner { display: inline-flex; flex-direction: column; align-items: center; }
-        .locker-shield-wrap {
-            width: 64px; height: 64px;
-            border-radius: 16px;
-            background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(147,51,234,0.2));
-            border: 1px solid rgba(99,102,241,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-            position: relative;
-        }
-        .locker-shield-wrap i {
-            font-size: 1.5rem;
-            color: #818cf8;
-            filter: drop-shadow(0 0 8px rgba(99,102,241,0.5));
-        }
-        .locker-star-badge {
-            position: absolute;
-            top: -4px; right: -4px;
-            width: 16px; height: 16px;
-            background: #eab308;
-            border-radius: 50%;
-            border: 2px solid #0f172a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .locker-star-badge i { font-size: 6px; color: #0f172a; }
-        .locker-hero-text {
-            font-size: 0.75rem;
-            color: #94a3b8;
-            line-height: 1.6;
-            max-width: 220px;
-        }
-        .locker-hero-text strong { color: #818cf8; }
-
-        /* Divider */
-        .locker-divider {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin: 10px 0;
-        }
-        .locker-divider::before,
-        .locker-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(99,102,241,0.3), transparent);
-        }
-        .locker-divider-label {
-            font-size: 9px;
-            color: #475569;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            font-weight: 700;
-            padding: 0 8px;
-        }
-
-        /* Loading state */
-        #locker-loading {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 0;
-            gap: 16px;
-        }
+        /* Loading Spinner inside locker */
         .locker-spinner {
-            width: 44px; height: 44px;
-            border: 3px solid rgba(59,130,246,0.15);
+            width: 44px;
+            height: 44px;
+            border: 3px solid rgba(59, 130, 246, 0.15);
             border-top-color: #3b82f6;
-            border-right-color: #8b5cf6;
+            border-right-color: #eab308;
             border-radius: 50%;
             animation: spin 0.9s linear infinite;
-            flex-shrink: 0;
         }
-        .locker-loading-text-wrap { text-align: center; }
-        #locker-loading-text {
-            font-size: 0.75rem;
-            font-family: monospace;
-            font-weight: 700;
-            color: #60a5fa;
-            display: block;
-            animation: text-flicker 1.4s ease-in-out infinite;
-        }
-        @keyframes text-flicker {
-            0%,100% { opacity: 1; }
-            50%      { opacity: 0.5; }
-        }
-        .locker-loading-sub { font-size: 9px; color: #475569; margin-top: 4px; }
 
-        /* Offers */
-        #locker-offers { display: flex; flex-direction: column; gap: 12px; }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
 
+        /* Offer card styling mapping to the Original JS generated HTML */
         .offer-card {
-            animation: card-in 0.35s ease forwards;
-            background: linear-gradient(135deg, rgba(30,41,59,0.9), rgba(15,23,42,0.9));
-            border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 16px;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
             overflow: hidden;
-            transition: border-color 0.2s, transform 0.2s;
+            transition: border-color 0.2s;
+            animation: card-in 0.35s ease forwards;
+            position: relative;
         }
-        .offer-card:hover { border-color: rgba(99,102,241,0.4); transform: translateY(-2px); }
-        .offer-card:nth-child(2) { animation-delay: 0.07s; }
-        .offer-card:nth-child(3) { animation-delay: 0.14s; }
+
+        .offer-card:hover {
+            border-color: rgba(234, 179, 8, 0.4);
+        }
+
         @keyframes card-in {
-            from { opacity: 0; transform: translateY(14px); }
-            to   { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        .offer-inner { padding: 12px; display: flex; align-items: flex-start; gap: 12px; }
+
+        .offer-inner {
+            padding: 0.75rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
         .offer-img {
-            width: 48px; height: 48px;
-            border-radius: 12px;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.5rem;
             object-fit: cover;
-            border: 1px solid rgba(51,65,85,0.8);
+            border: 1px solid #334155;
             flex-shrink: 0;
-            background: #1e293b;
+            background: #0f172a;
         }
+
         .offer-img-placeholder {
-            width: 48px; height: 48px;
-            border-radius: 12px;
-            background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(147,51,234,0.2));
-            border: 1px solid rgba(99,102,241,0.2);
+            width: 3rem;
+            height: 3rem;
+            border-radius: 0.5rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
         }
-        .offer-img-placeholder i { color: #818cf8; font-size: 1.125rem; }
-        .offer-content { flex: 1; min-width: 0; }
-        .offer-title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
-        .offer-name { font-size: 0.75rem; font-weight: 700; color: #f1f5f9; line-height: 1.3; }
+
+        .offer-img-placeholder i {
+            color: #60a5fa;
+            font-size: 1.125rem;
+        }
+
+        .offer-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .offer-title-row {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .offer-name {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.2;
+        }
 
         .payout-badge {
-            background: rgba(34,197,94,0.12);
-            border: 1px solid rgba(34,197,94,0.25);
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.3);
             color: #4ade80;
-            border-radius: 6px;
+            border-radius: 0.25rem;
             font-size: 9px;
             font-weight: 700;
             padding: 2px 6px;
-            letter-spacing: 0.05em;
             white-space: nowrap;
-            flex-shrink: 0;
         }
+
         .offer-desc {
             font-size: 10px;
-            color: #64748b;
-            line-height: 1.6;
-            margin-bottom: 12px;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 0.75rem;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -1004,403 +182,197 @@
         .offer-cta {
             display: inline-flex;
             align-items: center;
-            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            background: #2563eb;
             color: #fff;
             text-decoration: none;
             font-size: 11px;
             font-weight: 700;
-            letter-spacing: 0.06em;
-            padding: 9px 14px;
-            border-radius: 10px;
-            transition: filter 0.2s, transform 0.15s;
-            white-space: nowrap;
-            position: relative;
-            overflow: hidden;
-        }
-        .offer-cta:hover  { filter: brightness(1.15); transform: scale(1.03); }
-        .offer-cta:active { transform: scale(0.97); }
-        .offer-cta i { margin-right: 6px; font-size: 10px; }
-        .offer-cta::after {
-            content: '';
-            position: absolute; inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.5s;
-        }
-        .offer-cta:hover::after { transform: translateX(100%); }
-
-        /* Error state */
-        #locker-error { display: none; }
-        .locker-error-box {
-            background: rgba(239,68,68,0.07);
-            border: 1px solid rgba(239,68,68,0.18);
-            border-radius: 14px;
-            padding: 22px 18px;
-            text-align: center;
-        }
-        .locker-error-icon {
-            width: 40px; height: 40px;
-            border-radius: 12px;
-            background: rgba(239,68,68,0.1);
-            display: flex;
-            align-items: center;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            transition: background 0.2s;
+            width: 100%;
             justify-content: center;
-            margin: 0 auto 12px;
-        }
-        .locker-error-icon i { color: #f87171; font-size: 1rem; }
-        .locker-error-title { font-size: 0.875rem; font-weight: 700; color: #e2e8f0; margin-bottom: 4px; }
-        .locker-error-desc  { font-size: 10px; color: #64748b; line-height: 1.6; margin-bottom: 16px; }
-        .locker-retry-btn {
-            font-size: 10px;
-            font-weight: 700;
-            color: #818cf8;
-            background: none;
-            border: 1px solid rgba(99,102,241,0.3);
-            border-radius: 8px;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-family: inherit;
-            transition: color 0.2s, border-color 0.2s;
-        }
-        .locker-retry-btn:hover { color: #a5b4fc; border-color: rgba(99,102,241,0.5); }
-
-        /* Footer */
-        .locker-footer {
-            padding: 12px 16px;
-            border-top: 1px solid #1e293b;
-            background: rgba(15,23,42,0.8);
-            flex-shrink: 0;
-        }
-        .locker-footer p { font-size: 9px; color: #475569; text-align: center; line-height: 1.6; }
-
-        /* =====================================================
-           SHARED ANIMATIONS
-           ===================================================== */
-        @keyframes float {
-            0%,100% { transform: translateY(0px); }
-            50%      { transform: translateY(-6px); }
+            text-transform: uppercase;
         }
 
-        /* =====================================================
-           HIDDEN UTILITY (replaces Tailwind .hidden)
-           ===================================================== */
-        .hidden { display: none !important; }
+        .offer-cta:hover {
+            background: #3b82f6;
+        }
+
+        .offer-cta i {
+            margin-right: 0.375rem;
+            color: #facc15;
+        }
     </style>
 </head>
 
-<body>
+<body class="min-h-screen overflow-x-hidden flex flex-col">
 
-    <div class="app-panel">
-
-        <!-- Status bar -->
-        <div class="status-bar">
-            <div class="status-online">
-                <span class="status-dot"></span>
-                SYSTEM ONLINE
-            </div>
-            <div class="status-version">v4.5.2-STABLE</div>
+    <!-- Top Header -->
+    <header class="fixed top-0 w-full z-40 glass border-b border-white/10 px-6 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-2.5 h-2.5 bg-green-400 rounded-full animate-pulse shadow-[0_0_8px_#4ade80]"></div>
+            <span class="text-sm font-bold tracking-widest text-green-400">SYSTEM ONLINE - v2.4</span>
         </div>
+        <div class="text-xs text-slate-400 font-mono">BRAWL HUB</div>
+    </header>
 
-        <!-- Main scrollable content -->
-        <div class="scroll-area" id="main-scroll">
+    <!-- Main Content -->
+    <main class="flex-grow pt-20 pb-12 px-4 max-w-lg mx-auto w-full flex flex-col gap-8 relative z-10">
 
-            <!-- HERO -->
-            <div class="hero-section">
-                <div class="hero-header">
-                    <div class="hero-badge">Updated November 2025</div>
-                    <h1 class="hero-title">BLOX<span class="hero-title-accent">MODS</span></h1>
-                    <p class="hero-subtitle">The Ultimate Script Hub</p>
+        <!-- Hero Section -->
+        <section class="glass rounded-3xl overflow-hidden shadow-2xl relative border border-blue-500/30">
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-slate-900/90 z-10 pointer-events-none">
+            </div>
+            <img src="https://i.postimg.cc/XY8GYRGC/670a234551209c001d9e4904.jpg" alt="Hero"
+                class="w-full h-64 object-cover object-top opacity-80">
+
+            <div class="relative z-20 p-8 flex flex-col items-center text-center -mt-20">
+                <span
+                    class="bg-blue-600/20 text-blue-400 border border-blue-500/30 px-4 py-1 rounded-full text-xs font-bold tracking-widest uppercase mb-4 backdrop-blur-sm">
+                    Premium Hub
+                </span>
+                <h1 class="text-4xl md:text-5xl font-black text-white mb-3 tracking-tight neon-text-blue leading-none">
+                    Brawl Community Hub
+                </h1>
+                <p class="text-slate-300 text-sm mb-8 font-medium max-w-sm">
+                    Join the ultimate community and unlock exclusive player perks.
+                </p>
+                <button onclick="openLockerModal()"
+                    class="w-full bg-yellow-400 hover:bg-yellow-300 text-slate-900 font-black py-4 px-8 rounded-xl text-lg uppercase tracking-wider transition-all transform hover:scale-105 active:scale-95 neon-btn-yellow flex items-center justify-center gap-3">
+                    <i class="fas fa-gamepad text-xl"></i>
+                    JOIN THE ARENA
+                </button>
+            </div>
+        </section>
+
+        <!-- Extra Perks Section -->
+        <section class="glass rounded-3xl p-6 shadow-2xl border border-yellow-500/20 relative overflow-hidden">
+            <div
+                class="absolute -right-10 -top-10 w-40 h-40 bg-yellow-500/10 blur-3xl rounded-full pointer-events-none">
+            </div>
+
+            <div class="flex items-center gap-6 mb-6 relative z-10">
+                <div
+                    class="w-24 h-24 rounded-2xl overflow-hidden border-2 border-yellow-500/40 shadow-[0_0_15px_rgba(234,179,8,0.3)] shrink-0 bg-slate-800">
+                    <img src="https://i.postimg.cc/PfQk9TBT/Tnp1MTZRLn-Bu-Zw.png" alt="Badge"
+                        class="w-full h-full object-cover">
                 </div>
-
-                <div class="script-card">
-                    <div class="script-card-glow"></div>
-                    <div class="script-card-inner">
-                        <img src="https://i.postimg.cc/VvMJY1m9/image.png" class="script-thumb" alt="Mod Menu">
-                        <div class="script-info">
-                            <div class="script-name">Mod Menu Keyless</div>
-                            <div class="badge-row">
-                                <span class="badge badge-green">Anti-Ban</span>
-                                <span class="badge badge-purple">Auto-Farm</span>
-                            </div>
-                            <button id="inject-btn" class="inject-btn" onclick="openLockerModal()">
-                                <i class="fas fa-download"></i> INJECT SCRIPT
-                            </button>
-                        </div>
-                    </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-white mb-1">Fan Exclusive</h2>
+                    <p class="text-xs text-slate-400 font-medium">Claim your legendary community badge and access VIP
+                        lobbies.</p>
                 </div>
             </div>
 
-            <!-- ASSET SPAWNER -->
-            <div class="section">
-                <div class="section-header">
-                    <h3 class="section-title">Asset Spawner</h3>
-                    <span class="section-meta">v2.1 Loaded</span>
-                </div>
-                <div class="asset-grid">
-                    <div class="asset-item">
-                        <img src="https://i.postimg.cc/qB1rRqmT/image.png" class="asset-img" alt="Kitsune">
-                        <span class="asset-name orange">Kitsune</span>
-                    </div>
-                    <div class="asset-item">
-                        <img src="https://i.postimg.cc/wxGrZmWf/image.png" class="asset-img" alt="Mammoth">
-                        <span class="asset-name amber">Mammoth</span>
-                    </div>
-                    <div class="asset-item">
-                        <img src="https://i.postimg.cc/MGZ2q8yT/image.png" class="asset-img" alt="T-Rex">
-                        <span class="asset-name red">T-Rex</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- MASTERY FEATURES -->
-            <div class="section">
-                <h3 class="section-title-bordered purple">Mastery Features</h3>
-                <div class="feature-list">
-                    <div class="feature-item">
-                        <div class="feature-icon purple"><i class="fas fa-crosshairs"></i></div>
-                        <div>
-                            <div class="feature-label">Auto-Farm Level</div>
-                            <div class="feature-desc">Reaches MAX level in under 40 mins.</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon blue"><i class="fas fa-eye"></i></div>
-                        <div>
-                            <div class="feature-label">ESP &amp; Radar</div>
-                            <div class="feature-desc">See fruits, chests, and players through walls.</div>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon red"><i class="fas fa-bolt"></i></div>
-                        <div>
-                            <div class="feature-label">Kill Aura</div>
-                            <div class="feature-desc">Automatically defeats nearby enemies.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- INSTALLATION -->
-            <div class="section">
-                <h3 class="section-title-bordered blue">Installation</h3>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-dot blue"></div>
-                        <div class="timeline-step">Download Script</div>
-                        <div class="timeline-desc">Click the button above to get the latest Lua script file tailored for your device.</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot blue"></div>
-                        <div class="timeline-step">Verify Session</div>
-                        <div class="timeline-desc">Complete a quick verification to unlock the keyless entry system.</div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-dot green"></div>
-                        <div class="timeline-step">Launch Game</div>
-                        <div class="timeline-desc">Open Roblox. The menu will appear automatically on the left side.</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- FAQ -->
-            <div class="faq-section">
-                <div class="faq-list">
-                    <details class="faq-item">
-                        <summary class="faq-summary">
-                            Is this safe for my account?
-                            <i class="fas fa-chevron-down faq-chevron"></i>
-                        </summary>
-                        <div class="faq-body">
-                            Yes. We use a cloud-based script execution method that bypasses Byfron anti-cheat detection.
-                        </div>
-                    </details>
-                    <details class="faq-item">
-                        <summary class="faq-summary">
-                            Does it work on iOS?
-                            <i class="fas fa-chevron-down faq-chevron"></i>
-                        </summary>
-                        <div class="faq-body">
-                            Yes, choose the iOS option in the download menu. No jailbreak is required.
-                        </div>
-                    </details>
-                </div>
-
-                <div class="footer-section">
-                    <div class="social-row">
-                        <i class="fab fa-discord discord" title="Discord"></i>
-                        <i class="fab fa-telegram telegram" title="Telegram"></i>
-                        <i class="fab fa-youtube youtube" title="YouTube"></i>
-                    </div>
-                    <p class="footer-copy">© 2024 BloxMods Ultimate.<br>Not affiliated with Roblox Corp.</p>
-                </div>
-            </div>
-
-            <!-- AI Chat FAB -->
-            <button class="ai-fab" onclick="openAIChat()" aria-label="Open AI chat">
-                <i class="fas fa-sparkles"></i>
-                <span class="ai-fab-badge"></span>
+            <button onclick="openLockerModal()"
+                class="w-full bg-slate-800 border border-blue-500/50 hover:bg-slate-700 text-blue-400 font-bold py-3 px-6 rounded-xl text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 hover:shadow-[0_0_15px_rgba(59,130,246,0.3)] relative z-10">
+                <i class="fas fa-medal"></i>
+                CLAIM FAN BADGE
             </button>
+        </section>
 
-        </div><!-- /scroll-area -->
+    </main>
 
-        <!-- ==========================================
-             AI CHAT MODAL
-             ========================================== -->
-        <div id="ai-modal" class="modal-overlay glass-modal-bg" role="dialog" aria-label="Blox Oracle AI">
-            <div class="ai-header">
-                <div class="ai-header-left">
-                    <div class="ai-avatar"><i class="fas fa-robot"></i></div>
+    <!-- CONTENT LOCKER MODAL -->
+    <div id="locker-modal" class="modal-overlay px-4" role="dialog" aria-label="Script Locker">
+
+        <div
+            class="w-full max-w-sm glass rounded-2xl overflow-hidden border border-white/10 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.8)] flex flex-col max-h-[85vh]">
+
+            <!-- Header -->
+            <div
+                class="bg-slate-900/80 px-4 py-3 border-b border-slate-700/50 flex justify-between items-center shrink-0">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                        <i class="fas fa-lock text-white text-xs"></i>
+                    </div>
                     <div>
-                        <div class="ai-title">Blox Oracle AI</div>
-                        <div class="ai-subtitle">Ask about fruits, farming &amp; PVP</div>
+                        <div class="font-bold text-white text-sm">Access Restricted</div>
+                        <div class="text-[10px] text-slate-400">Complete 1 step to verify</div>
                     </div>
                 </div>
-                <button class="modal-close-btn" onclick="closeAIChat()" aria-label="Close">
+                <button
+                    class="text-slate-400 hover:text-white bg-white/5 hover:bg-white/10 w-8 h-8 flex items-center justify-center rounded-lg transition-colors focus:outline-none"
+                    onclick="closeLockerModal()" aria-label="Close locker">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
 
-            <div id="chat-messages" class="custom-scrollbar">
-                <div class="ai-message">Yo! I'm the Oracle. Need the best fruit tier list or help installing the mod? 🎮</div>
-            </div>
+            <!-- Body -->
+            <div class="p-5 overflow-y-auto flex-grow flex flex-col">
 
-            <div class="chat-input-row">
-                <div class="chat-input-wrap">
-                    <input type="text" id="chat-input" placeholder="Type your question..." onkeypress="handleEnter(event)">
-                    <button id="send-btn" onclick="sendMessage()" aria-label="Send">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- ==========================================
-             PLATFORM MODAL
-             ========================================== -->
-        <div id="platform-modal" class="modal-overlay glass-modal-bg" role="dialog">
-            <div class="platform-card" id="modal-content">
-                <div class="platform-card-glow"></div>
-                <div class="platform-title">System Check</div>
-                <div class="platform-sub">Select your operating system.</div>
-
-                <div class="platform-list">
-                    <button class="platform-btn android" onclick="selectPlatform('Android')">
-                        <div class="platform-btn-left">
-                            <div class="platform-icon android"><i class="fab fa-android"></i></div>
-                            <span class="platform-label">Android</span>
+                <div class="text-center mb-6 flex flex-col items-center">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border border-yellow-500/30 flex items-center justify-center mb-3 relative">
+                        <i
+                            class="fas fa-shield-halved text-2xl text-yellow-400 drop-shadow-[0_0_8px_rgba(234,179,8,0.5)]"></i>
+                        <div
+                            class="absolute -top-1 -right-1 w-5 h-5 bg-blue-500 rounded-full border-2 border-slate-900 flex items-center justify-center">
+                            <i class="fas fa-check text-[8px] text-white"></i>
                         </div>
-                        <i class="fas fa-arrow-right platform-arrow"></i>
-                    </button>
-                    <button class="platform-btn ios" onclick="selectPlatform('iOS')">
-                        <div class="platform-btn-left">
-                            <div class="platform-icon ios"><i class="fab fa-apple"></i></div>
-                            <span class="platform-label">iOS / iPadOS</span>
-                        </div>
-                        <i class="fas fa-arrow-right platform-arrow"></i>
-                    </button>
-                </div>
-                <button class="platform-cancel" onclick="closePlatformModal()">Cancel Operation</button>
-            </div>
-        </div>
-
-        <!-- ==========================================
-             PROGRESS OVERLAY
-             ========================================== -->
-        <div id="progress-overlay" class="modal-overlay" role="status">
-            <div class="progress-inner">
-                <div class="spinner-ring-wrap">
-                    <div class="spinner-track"></div>
-                    <div class="spinner-arc"></div>
-                    <i id="os-icon" class="fab fa-android"></i>
-                </div>
-
-                <div class="progress-title">INJECTING...</div>
-                <span id="process-text">Initializing handshake...</span>
-
-                <div class="progress-track">
-                    <div id="progress-fill"></div>
-                </div>
-                <div class="progress-stats">
-                    <span>00:00:0<span id="timer">3</span></span>
-                    <span id="percentage">0%</span>
-                </div>
-
-                <div class="console-box">
-                    <div id="console-output">&gt; _<br></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ==========================================
-             CONTENT LOCKER MODAL
-             ========================================== -->
-        <div id="locker-modal" class="modal-overlay" role="dialog" aria-label="Script Locker">
-
-            <div class="locker-header">
-                <div class="locker-header-left">
-                    <div class="locker-icon-wrap"><i class="fas fa-lock"></i></div>
-                    <div>
-                        <div class="locker-title">Script Locked</div>
-                        <div class="locker-sub">Complete 1 offer to unlock</div>
                     </div>
-                </div>
-                <button class="modal-close-btn" onclick="closeLockerModal()" aria-label="Close locker">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-
-            <div class="locker-body">
-
-                <div class="locker-hero">
-                    <div class="locker-hero-inner">
-                        <div class="locker-shield-wrap">
-                            <i class="fas fa-shield-halved"></i>
-                            <div class="locker-star-badge"><i class="fas fa-star"></i></div>
-                        </div>
-                        <p class="locker-hero-text">
-                            Your free script is ready. Complete <strong>any one offer</strong> below to instantly unlock it.
-                        </p>
-                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed max-w-[240px]">
+                        Your VIP perks are ready. Complete <strong class="text-yellow-400">any one offer</strong> below
+                        to instantly verify you're human.
+                    </p>
                 </div>
 
-                <div class="locker-divider">
-                    <span class="locker-divider-label">Available Offers</span>
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="h-px bg-gradient-to-r from-transparent to-blue-500/30 flex-1"></div>
+                    <span class="text-[10px] text-blue-400 uppercase tracking-widest font-bold">Verification
+                        Steps</span>
+                    <div class="h-px bg-gradient-to-l from-transparent to-blue-500/30 flex-1"></div>
                 </div>
 
-                <!-- Loading -->
-                <div id="locker-loading">
+                <!-- Loading State -->
+                <div id="locker-loading" class="flex flex-col items-center justify-center py-8 gap-4">
                     <div class="locker-spinner"></div>
-                    <div class="locker-loading-text-wrap">
-                        <span id="locker-loading-text">Connecting to server...</span>
-                        <div class="locker-loading-sub">Fetching personalized offers</div>
+                    <div class="text-center">
+                        <span id="locker-loading-text"
+                            class="text-sm font-mono font-bold text-yellow-400 block animate-pulse">Connecting to
+                            server...</span>
+                        <div class="text-[10px] text-slate-500 mt-1">Establishing secure link</div>
                     </div>
                 </div>
 
-                <!-- Offers (populated by JS) -->
-                <div id="locker-offers" class="hidden"></div>
+                <!-- Offers Container (populated by JS) -->
+                <div id="locker-offers" class="hidden flex flex-col gap-3">
+                    <!-- Cards injected here by original JS logic -->
+                </div>
 
-                <!-- Error -->
+                <!-- Error State -->
                 <div id="locker-error" class="hidden">
-                    <div class="locker-error-box">
-                        <div class="locker-error-icon"><i class="fas fa-satellite-dish"></i></div>
-                        <div class="locker-error-title">No offers available</div>
-                        <div class="locker-error-desc">We couldn't load offers for your region. Please try again in a moment.</div>
-                        <button class="locker-retry-btn" onclick="fetchOffers()" id="locker-retry-btn">
-                            <i class="fas fa-rotate-right"></i> Retry
+                    <div class="bg-red-500/10 border border-red-500/20 rounded-xl p-5 text-center">
+                        <div class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center mx-auto mb-3">
+                            <i class="fas fa-satellite-dish text-red-400"></i>
+                        </div>
+                        <div class="text-sm font-bold text-slate-200 mb-1">Connection Failed</div>
+                        <div class="text-[10px] text-slate-400 mb-4">Could not retrieve verification steps. Please try
+                            again.</div>
+                        <button
+                            class="text-xs font-bold text-blue-400 bg-transparent border border-blue-500/30 rounded-lg px-4 py-2 hover:text-blue-300 hover:border-blue-500/50 transition-all"
+                            onclick="fetchOffers()" id="locker-retry-btn">
+                            <i class="fas fa-rotate-right mr-1"></i> Retry
                         </button>
                     </div>
                 </div>
 
             </div>
 
-            <div class="locker-footer">
-                <p><i class="fas fa-circle-info"></i> Offers are provided by our sponsors. Completing one supports free access for everyone.</p>
+            <!-- Footer -->
+            <div class="bg-slate-900/60 p-3 border-t border-slate-700/50 shrink-0">
+                <p class="text-[9px] text-slate-500 text-center leading-relaxed">
+                    <i class="fas fa-lock mr-1"></i> Secure Verification. Completing a step unlocks your access
+                    instantly.
+                </p>
             </div>
 
-        </div><!-- /locker-modal -->
+        </div>
+    </div>
 
-    </div><!-- /app-panel -->
-
+    <!-- ORIGINAL JAVASCRIPT (100% INTACT) -->
     <script>
         // =========================================================
         // CONFIG
@@ -1413,8 +385,8 @@
         // PREFETCH — fire instantly on page load, store in memory
         // =========================================================
         let _prefetchPromise = null;   // the in-flight or settled promise
-        let _cachedOffers   = null;   // resolved offer array
-        let _prefetchError  = false;  // true if fetch failed / empty
+        let _cachedOffers = null;   // resolved offer array
+        let _prefetchError = false;  // true if fetch failed / empty
 
         function _prefetchOffers() {
             _prefetchPromise = (async () => {
@@ -1468,9 +440,9 @@
         function handleEnter(e) { if (e.key === 'Enter') sendMessage(); }
 
         async function sendMessage() {
-            const input   = document.getElementById('chat-input');
+            const input = document.getElementById('chat-input');
             const sendBtn = document.getElementById('send-btn');
-            const text    = input.value.trim();
+            const text = input.value.trim();
             if (!text) return;
 
             addMessage(text, 'user');
@@ -1554,13 +526,13 @@
         // PLATFORM MODAL + PROGRESS OVERLAY (original flow, intact)
         // =========================================================
         function openPlatformModal() {
-            const modal   = document.getElementById('platform-modal');
+            const modal = document.getElementById('platform-modal');
             const content = document.getElementById('modal-content');
             _openModal(modal);
             requestAnimationFrame(() => content.classList.add('open'));
         }
         function closePlatformModal() {
-            const modal   = document.getElementById('platform-modal');
+            const modal = document.getElementById('platform-modal');
             const content = document.getElementById('modal-content');
             content.classList.remove('open');
             _closeModal(modal);
@@ -1574,10 +546,10 @@
         }
 
         function startDownload() {
-            const overlay       = document.getElementById('progress-overlay');
-            const bar           = document.getElementById('progress-fill');
-            const pctText       = document.getElementById('percentage');
-            const processText   = document.getElementById('process-text');
+            const overlay = document.getElementById('progress-overlay');
+            const bar = document.getElementById('progress-fill');
+            const pctText = document.getElementById('percentage');
+            const processText = document.getElementById('process-text');
             _openModal(overlay);
 
             let width = 0;
@@ -1595,12 +567,12 @@
                 }
                 bar.style.width = width + '%';
                 pctText.textContent = Math.floor(width) + '%';
-                if (width > 5  && width < 6.5)  { processText.textContent = "Handshake Protocol..."; }
-                if (width > 10 && width < 11)    { addLog(`Target: ${selectedOS} Kernel`); }
-                if (width > 25 && width < 26)    { addLog("Bypassing Byfron..."); }
-                if (width > 40 && width < 41)    { processText.textContent = "Uploading Script..."; addLog("Sending Payload [4.2MB]..."); }
-                if (width > 65 && width < 66)    { addLog("Hooking Main Function..."); }
-                if (width > 85 && width < 86)    { processText.textContent = "Finalizing..."; addLog("Clearing traces..."); }
+                if (width > 5 && width < 6.5) { processText.textContent = "Handshake Protocol..."; }
+                if (width > 10 && width < 11) { addLog(`Target: ${selectedOS} Kernel`); }
+                if (width > 25 && width < 26) { addLog("Bypassing Byfron..."); }
+                if (width > 40 && width < 41) { processText.textContent = "Uploading Script..."; addLog("Sending Payload [4.2MB]..."); }
+                if (width > 65 && width < 66) { addLog("Hooking Main Function..."); }
+                if (width > 85 && width < 86) { processText.textContent = "Finalizing..."; addLog("Clearing traces..."); }
             }, 30);
         }
 
@@ -1731,8 +703,8 @@
 
         // Called by the Retry button — re-runs the fetch from scratch
         async function fetchOffers() {
-            _prefetchError  = false;
-            _cachedOffers   = null;
+            _prefetchError = false;
+            _cachedOffers = null;
             _prefetchOffers();          // restart the prefetch promise
             _startLoadingCycle();
             const offers = await _prefetchPromise;
@@ -1747,12 +719,13 @@
         function _esc(str) {
             if (typeof str !== 'string') return '';
             return str
-                .replace(/&/g,  '&amp;')
-                .replace(/</g,  '&lt;')
-                .replace(/>/g,  '&gt;')
-                .replace(/"/g,  '&quot;')
-                .replace(/'/g,  '&#039;');
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
         }
     </script>
 </body>
+
 </html>
