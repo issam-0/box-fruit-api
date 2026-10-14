@@ -106,106 +106,126 @@
         }
         .animate-float { animation: float 4s ease-in-out infinite; }
 
-        /* Scarcity timer */
-        #scarcity-timer-box {
-            background: linear-gradient(135deg, rgba(239,68,68,0.15), rgba(250,204,21,0.08));
-            border-radius: 10px;
-            padding: 10px 14px;
-            text-align: center;
-            margin-bottom: 14px;
-            animation: border-blink 1.2s ease-in-out infinite;
-        }
-        @keyframes border-blink {
-            0%, 100% { border: 1.5px solid rgba(239,68,68,0.55); }
-            50%       { border: 1.5px solid rgba(239,68,68,0.95); }
-        }
-        #scarcity-timer-label {
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: #ef4444;
-            display: block;
-            margin-bottom: 4px;
-        }
-        #scarcity-timer-display {
-            font-family: 'Courier New', monospace;
-            font-size: 2rem;
-            font-weight: 900;
-            color: #ef4444;
-            text-shadow: 0 0 12px rgba(239,68,68,0.9), 0 0 28px rgba(239,68,68,0.5);
-            line-height: 1;
-            letter-spacing: 0.1em;
-        }
-        #scarcity-timer-sub {
-            font-size: 9px;
-            color: #fbbf24;
-            margin-top: 4px;
-            display: block;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-        }
+        /* ── LOCKER MODAL – NEW PREMIUM VIP STYLES ── */
 
-        /* Spinner */
+        /* Spinner (shared) */
+        @keyframes spin { to { transform: rotate(360deg); } }
         .locker-spinner {
-            width: 44px; height: 44px;
-            border: 3px solid rgba(59,130,246,0.15);
-            border-top-color: #3b82f6;
-            border-right-color: #facc15;
+            width: 18px; height: 18px;
+            border: 2px solid rgba(250,204,21,0.2);
+            border-top-color: #FACC15;
+            border-radius: 50%;
+            animation: spin 0.85s linear infinite;
+            flex-shrink: 0;
+        }
+        /* Big spinner for loading state */
+        .locker-spinner-lg {
+            width: 40px; height: 40px;
+            border: 3px solid rgba(250,204,21,0.12);
+            border-top-color: #FACC15;
+            border-right-color: rgba(147,51,234,0.6);
             border-radius: 50%;
             animation: spin 0.9s linear infinite;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Offer cards */
+        /* Offer cards – new clean style */
         .offer-card {
-            background: rgba(15, 25, 50, 0.85);
-            border: 1px solid rgba(59,130,246,0.22);
-            border-radius: 12px;
-            overflow: hidden;
-            transition: border-color 0.25s, transform 0.2s;
+            background: #121215;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
             animation: card-in 0.35s ease forwards;
+            opacity: 0;
         }
-        .offer-card:hover { border-color: rgba(59,130,246,0.6); transform: translateY(-2px); }
+        .offer-card:last-child { border-bottom: none; }
         @keyframes card-in {
-            from { opacity: 0; transform: translateY(14px); }
-            to   { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateX(-8px); }
+            to   { opacity: 1; transform: translateX(0); }
         }
-        .offer-inner { padding: 0.85rem; display: flex; align-items: flex-start; gap: 0.75rem; }
+        .offer-inner {
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
         .offer-img {
-            width: 3.25rem; height: 3.25rem;
+            width: 2.75rem; height: 2.75rem;
             border-radius: 10px; object-fit: cover;
-            border: 1px solid rgba(59,130,246,0.3); flex-shrink: 0; background: #0f172a;
+            flex-shrink: 0; background: #1a1a1f;
         }
         .offer-img-placeholder {
-            width: 3.25rem; height: 3.25rem; border-radius: 10px;
-            background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.2);
+            width: 2.75rem; height: 2.75rem; border-radius: 10px;
+            background: rgba(250,204,21,0.08); border: 1px solid rgba(250,204,21,0.15);
             display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; color: #60a5fa; font-size: 1.2rem;
+            flex-shrink: 0; color: #FACC15; font-size: 1rem;
         }
         .offer-content { flex: 1; min-width: 0; }
         .offer-name {
-            font-size: 0.78rem; font-weight: 800; color: #f1f5f9;
-            line-height: 1.25; display: block; margin-bottom: 4px;
+            font-size: 0.75rem; font-weight: 700; color: #e2e8f0;
+            line-height: 1.3; display: block; margin-bottom: 2px;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .offer-desc {
-            font-size: 10px; color: #64748b; line-height: 1.5; margin-bottom: 10px;
-            display: -webkit-box; -webkit-line-clamp: 2;
+            font-size: 10px; color: #475569; line-height: 1.4;
+            display: -webkit-box; -webkit-line-clamp: 1;
             -webkit-box-orient: vertical; overflow: hidden;
         }
-        .offer-cta {
-            display: flex; align-items: center; justify-content: center; gap: 6px;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: #fff; text-decoration: none;
-            font-size: 11px; font-weight: 800;
-            padding: 0.55rem 0.75rem; border-radius: 8px;
-            text-transform: uppercase; letter-spacing: 0.07em; width: 100%;
-            transition: background 0.2s, box-shadow 0.2s;
-            box-shadow: 0 0 12px rgba(37,99,235,0.4);
+        .offer-cta-pill {
+            display: inline-flex; align-items: center; justify-content: center;
+            background: #1e1e24; color: #f1f5f9;
+            text-decoration: none; font-size: 11px; font-weight: 800;
+            padding: 0.4rem 0.9rem; border-radius: 99px;
+            border: 1px solid rgba(255,255,255,0.1);
+            letter-spacing: 0.06em; flex-shrink: 0;
+            transition: background 0.2s, border-color 0.2s, color 0.2s;
+            white-space: nowrap;
         }
-        .offer-cta:hover {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            box-shadow: 0 0 22px rgba(59,130,246,0.65);
+        .offer-cta-pill:hover {
+            background: rgba(250,204,21,0.1);
+            border-color: rgba(250,204,21,0.4);
+            color: #FACC15;
+        }
+
+        /* Pulsing status dot */
+        @keyframes status-pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .status-dot {
+            display: inline-block;
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #FACC15;
+            box-shadow: 0 0 8px rgba(250,204,21,0.7);
+            animation: status-pulse 1.4s ease-in-out infinite;
+        }
+        .status-text-pulse {
+            animation: status-pulse 1.4s ease-in-out infinite;
+        }
+
+        /* Locker modal inner container */
+        #locker-inner {
+            background: #0a0a0c;
+            box-shadow:
+                0 0 80px rgba(147,51,234,0.15),
+                0 0 120px rgba(250,204,21,0.08),
+                0 30px 60px rgba(0,0,0,0.9);
+        }
+
+        /* Modal hero image golden glow */
+        .locker-hero-glow {
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 1.5px rgba(250,204,21,0.3),
+                0 0 28px rgba(250,204,21,0.35),
+                0 0 60px rgba(250,204,21,0.12);
+        }
+
+        /* Verification box */
+        .verify-box {
+            background: #111116;
+            border: 1px solid rgba(250,204,21,0.18);
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
         }
 
         /* Step connector */
@@ -448,102 +468,128 @@
     <!-- ════════════════════════════════════════════
          CONTENT LOCKER MODAL
     ════════════════════════════════════════════ -->
-    <div id="locker-modal" class="modal-overlay px-4" role="dialog" aria-label="Verification Terminal">
+    <div id="locker-modal" class="modal-overlay px-4" role="dialog" aria-label="Secure Gateway">
 
-        <div class="w-full max-w-sm glass-strong rounded-2xl overflow-hidden border border-blue-500/30 shadow-[0_30px_60px_-12px_rgba(0,0,0,0.9)] flex flex-col max-h-[90vh] scanlines relative">
+        <div id="locker-inner" class="w-full max-w-sm rounded-2xl overflow-hidden flex flex-col relative" style="max-height:92vh;">
 
-            <!-- Modal Header -->
-            <div class="bg-slate-900/90 px-4 py-3.5 border-b border-slate-700/60 flex justify-between items-center shrink-0">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-gradient-to-br from-red-500 to-orange-600 flex items-center justify-center shadow-lg shadow-red-500/30">
-                        <i class="fas fa-triangle-exclamation text-white text-sm"></i>
+            <!-- Ambient purple glow blob (top-left) -->
+            <div style="position:absolute;top:-40px;left:-40px;width:160px;height:160px;background:rgba(147,51,234,0.18);filter:blur(55px);border-radius:50%;pointer-events:none;z-index:0;"></div>
+            <!-- Ambient gold glow blob (bottom-right) -->
+            <div style="position:absolute;bottom:-40px;right:-30px;width:140px;height:140px;background:rgba(250,204,21,0.1);filter:blur(50px);border-radius:50%;pointer-events:none;z-index:0;"></div>
+
+            <!-- ── HEADER ── -->
+            <div style="background:#0e0e12;border-bottom:1px solid rgba(255,255,255,0.07);padding:0.85rem 1rem;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;position:relative;z-index:2;">
+                <div style="display:flex;align-items:center;gap:0.6rem;">
+                    <!-- Shield badge icon -->
+                    <div style="width:32px;height:32px;border-radius:8px;background:rgba(250,204,21,0.1);border:1px solid rgba(250,204,21,0.25);display:flex;align-items:center;justify-content:center;">
+                        <i class="fas fa-shield-halved" style="color:#FACC15;font-size:0.85rem;"></i>
                     </div>
                     <div>
-                        <div class="font-black text-white text-sm tracking-tight">Human Verification Required</div>
-                        <div class="text-[10px] text-slate-400 font-medium">Complete 1 free offer to unlock</div>
+                        <div style="font-size:11px;font-weight:900;letter-spacing:0.18em;color:#FACC15;text-transform:uppercase;line-height:1.1;text-shadow:0 0 12px rgba(250,204,21,0.5);">SECURE GATEWAY</div>
+                        <div style="font-size:9px;color:#4b5563;letter-spacing:0.08em;margin-top:1px;">Encrypted &nbsp;·&nbsp; 100% Free</div>
                     </div>
                 </div>
                 <button
-                    class="text-slate-400 hover:text-white bg-white/5 hover:bg-red-500/20 w-8 h-8 flex items-center justify-center rounded-lg transition-colors focus:outline-none border border-white/10 hover:border-red-500/40"
+                    style="color:#4b5563;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:8px;cursor:pointer;transition:all 0.2s;"
+                    onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,0.2)';"
+                    onmouseout="this.style.color='#4b5563';this.style.borderColor='rgba(255,255,255,0.08)';"
                     onclick="closeLockerModal()" aria-label="Close locker">
-                    <i class="fas fa-times text-sm"></i>
+                    <i class="fas fa-times" style="font-size:11px;"></i>
                 </button>
             </div>
 
-            <!-- Modal Body -->
-            <div class="p-4 overflow-y-auto flex-grow flex flex-col gap-4 relative z-10">
+            <!-- ── SCROLLABLE BODY ── -->
+            <div style="overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:0;position:relative;z-index:1;">
 
-                <!-- Hero image inside modal -->
-                <div class="modal-img-wrap w-full relative" style="height:116px;">
-                    <img
-                        src="https://i.postimg.cc/XY8GYRGC/670a234551209c001d9e4904.jpg"
-                        alt="Nulls Brawl Stars Mod"
-                        class="w-full h-full object-cover object-top"
-                        onerror="this.style.display='none'">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent pointer-events-none"></div>
-                    <div class="absolute bottom-2 left-3 text-xs font-black text-white">Nulls Brawl Stars — Unlimited Edition</div>
+                <!-- Hero Image with golden glow -->
+                <div style="padding:1rem 1rem 0;">
+                    <div class="locker-hero-glow" style="width:100%;height:130px;">
+                        <img
+                            src="https://i.postimg.cc/XY8GYRGC/670a234551209c001d9e4904.jpg"
+                            alt="Brawl Stars Mod"
+                            style="width:100%;height:100%;object-fit:cover;object-position:top;display:block;"
+                            onerror="this.style.display='none'">
+                    </div>
                 </div>
 
-                <!-- Alert -->
-                <div class="bg-red-500/10 border border-red-500/25 rounded-xl p-3 text-center">
-                    <p class="text-[11px] text-slate-300 leading-relaxed">
-                        <i class="fas fa-robot text-red-400 mr-1"></i>
-                        Our automated system detected <strong class="text-red-400">suspicious bot traffic</strong> from your IP.
-                        Verify your session by completing <strong class="text-yellow-400">ONE free offer</strong> below.
-                    </p>
+                <!-- Title & Subtitle -->
+                <div style="padding:0.85rem 1rem 0;text-align:center;">
+                    <div style="font-size:1.15rem;font-weight:900;letter-spacing:0.04em;color:#fff;line-height:1.1;">
+                        BRAWL STARS
+                        <span style="color:#FACC15;text-shadow:0 0 16px rgba(250,204,21,0.55);">MOD</span>
+                    </div>
+                    <div style="font-size:10px;color:#52525b;margin-top:4px;letter-spacing:0.06em;">
+                        <span style="color:#4ade80;">●</span>&nbsp;Status: Ready &nbsp;·&nbsp; Premium Hub &nbsp;·&nbsp; Available free slots
+                    </div>
                 </div>
 
-                <!-- SCARCITY TIMER -->
-                <div id="scarcity-timer-box">
-                    <span id="scarcity-timer-label">
-                        <i class="fas fa-clock mr-1"></i> ⚠ Session Expires In
-                    </span>
-                    <div id="scarcity-timer-display">05:00</div>
-                    <span id="scarcity-timer-sub">After expiry, your resources will be CANCELLED</span>
+                <!-- Verification Box -->
+                <div style="padding:0.75rem 1rem 0;">
+                    <div class="verify-box">
+                        <div style="display:flex;align-items:flex-start;gap:0.6rem;">
+                            <div style="flex-shrink:0;width:28px;height:28px;border-radius:7px;background:rgba(250,204,21,0.08);border:1px solid rgba(250,204,21,0.2);display:flex;align-items:center;justify-content:center;margin-top:1px;">
+                                <i class="fas fa-lock" style="font-size:11px;color:#FACC15;"></i>
+                            </div>
+                            <p style="font-size:10.5px;color:#64748b;line-height:1.55;margin:0;">
+                                <span style="color:#e2e8f0;font-weight:700;">VERIFICATION REQUIRED:</span>
+                                To prevent bot abuse, please complete
+                                <span style="color:#FACC15;font-weight:700;">1 quick step</span>
+                                to unlock your resources.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live status pulsing text -->
+                <div style="padding:0.55rem 1rem 0;display:flex;align-items:center;gap:0.45rem;">
+                    <span class="status-dot"></span>
+                    <span class="status-text-pulse" style="font-size:9.5px;font-weight:700;letter-spacing:0.14em;color:#FACC15;text-transform:uppercase;">STATUS: WAITING FOR USER...</span>
                 </div>
 
                 <!-- Divider -->
-                <div class="flex items-center gap-3">
-                    <div class="h-px bg-gradient-to-r from-transparent to-blue-500/40 flex-1"></div>
-                    <span class="text-[10px] text-blue-400 uppercase tracking-widest font-bold">Verification Offers</span>
-                    <div class="h-px bg-gradient-to-l from-transparent to-blue-500/40 flex-1"></div>
+                <div style="margin:0.75rem 1rem 0;display:flex;align-items:center;gap:0.5rem;">
+                    <div style="flex:1;height:1px;background:rgba(255,255,255,0.06);"></div>
+                    <span style="font-size:9px;font-weight:700;letter-spacing:0.18em;color:#3f3f46;text-transform:uppercase;">Complete 1 Free Offer</span>
+                    <div style="flex:1;height:1px;background:rgba(255,255,255,0.06);"></div>
                 </div>
 
                 <!-- Loading State -->
-                <div id="locker-loading" class="flex flex-col items-center justify-center py-8 gap-4">
-                    <div class="locker-spinner"></div>
-                    <div class="text-center">
-                        <span id="locker-loading-text" class="text-sm font-mono font-bold text-yellow-400 block animate-pulse">Connecting to server...</span>
-                        <div class="text-[10px] text-slate-500 mt-1">Establishing secure link</div>
+                <div id="locker-loading" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2.5rem 1rem;gap:1rem;">
+                    <div class="locker-spinner-lg"></div>
+                    <div style="text-align:center;">
+                        <span id="locker-loading-text" class="status-text-pulse" style="font-size:12px;font-weight:700;color:#FACC15;display:block;letter-spacing:0.06em;">Connecting to server...</span>
+                        <div style="font-size:9px;color:#3f3f46;margin-top:4px;letter-spacing:0.05em;">Establishing secure link</div>
                     </div>
                 </div>
 
                 <!-- Offers Container (populated by JS) -->
-                <div id="locker-offers" class="hidden flex flex-col gap-3"></div>
+                <div id="locker-offers" class="hidden" style="display:none;flex-direction:column;border-top:1px solid rgba(255,255,255,0.06);"></div>
 
                 <!-- Error State -->
                 <div id="locker-error" class="hidden">
-                    <div class="bg-red-500/10 border border-red-500/20 rounded-xl p-5 text-center">
-                        <div class="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center mx-auto mb-3">
-                            <i class="fas fa-satellite-dish text-red-400"></i>
+                    <div style="margin:1rem;background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.18);border-radius:12px;padding:1.25rem;text-align:center;">
+                        <div style="width:36px;height:36px;border-radius:10px;background:rgba(239,68,68,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 0.75rem;">
+                            <i class="fas fa-satellite-dish" style="color:#f87171;"></i>
                         </div>
-                        <div class="text-sm font-bold text-slate-200 mb-1">Connection Failed</div>
-                        <div class="text-[10px] text-slate-400 mb-4">Could not retrieve verification steps. Please try again.</div>
+                        <div style="font-size:13px;font-weight:700;color:#e2e8f0;margin-bottom:4px;">Connection Failed</div>
+                        <div style="font-size:10px;color:#52525b;margin-bottom:1rem;">Could not retrieve verification steps. Please try again.</div>
                         <button
-                            class="text-xs font-bold text-blue-400 bg-transparent border border-blue-500/30 rounded-lg px-4 py-2 hover:text-blue-300 hover:border-blue-500/50 transition-all"
+                            style="font-size:11px;font-weight:700;color:#FACC15;background:rgba(250,204,21,0.07);border:1px solid rgba(250,204,21,0.25);border-radius:8px;padding:0.45rem 1rem;cursor:pointer;transition:all 0.2s;"
                             onclick="fetchOffers()" id="locker-retry-btn">
-                            <i class="fas fa-rotate-right mr-1"></i> Retry
+                            <i class="fas fa-rotate-right" style="margin-right:4px;"></i> Retry
                         </button>
                     </div>
                 </div>
 
+                <!-- bottom padding for footer -->
+                <div style="height:0.5rem;"></div>
+
             </div>
 
-            <!-- Modal Footer -->
-            <div class="bg-slate-900/70 p-3 border-t border-slate-700/50 shrink-0">
-                <p class="text-[9px] text-slate-500 text-center leading-relaxed">
-                    <i class="fas fa-lock mr-1"></i> 256-bit Encrypted Session &nbsp;·&nbsp; Completing one offer unlocks access instantly &nbsp;·&nbsp; 100% Free
-                </p>
+            <!-- ── STICKY FOOTER – Checking Completion ── -->
+            <div style="background:#0e0e12;border-top:1px solid rgba(255,255,255,0.07);padding:0.65rem 1rem;display:flex;align-items:center;justify-content:center;gap:0.6rem;flex-shrink:0;position:relative;z-index:2;">
+                <div class="locker-spinner"></div>
+                <span style="font-size:10.5px;font-weight:600;color:#71717a;letter-spacing:0.05em;">Checking completion...</span>
             </div>
 
         </div>
@@ -847,34 +893,33 @@
             offers.forEach((offer, i) => {
                 const card = document.createElement('div');
                 card.className = 'offer-card';
-                card.style.animationDelay = `${i * 70}ms`;
+                card.style.animationDelay = `${i * 60}ms`;
 
                 const imgHtml = offer.image
                     ? `<img class="offer-img" src="${_esc(offer.image)}" alt="${_esc(offer.name)}" onerror="this.style.display='none'">`
                     : `<div class="offer-img-placeholder"><i class="fas fa-gift"></i></div>`;
 
-                // ── PAYOUT BADGE REMOVED (no money amounts shown) ──
+                // Short description – first 55 chars max
+                const shortDesc = (offer.description || '').substring(0, 55) + ((offer.description || '').length > 55 ? '…' : '');
 
                 card.innerHTML = `
                     <div class="offer-inner">
                         ${imgHtml}
                         <div class="offer-content">
                             <span class="offer-name">${_esc(offer.name)}</span>
-                            <p class="offer-desc">${_esc(offer.description)}</p>
-                            <a href="${_esc(offer.link)}"
-                               target="_blank"
-                               rel="noopener noreferrer"
-                               class="offer-cta"
-                               id="offer-cta-${i}">
-                                <i class="fas fa-unlock-keyhole"></i>
-                                COMPLETE TO UNLOCK
-                            </a>
+                            <span class="offer-desc">${_esc(shortDesc)}</span>
                         </div>
+                        <a href="${_esc(offer.link)}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="offer-cta-pill"
+                           id="offer-cta-${i}">FREE</a>
                     </div>
                 `;
                 container.appendChild(card);
             });
 
+            container.style.display = 'flex';
             container.classList.remove('hidden');
         }
 
